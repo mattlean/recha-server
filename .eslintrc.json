@@ -4,15 +4,19 @@
         "node": true
     },
     "extends": [
-        "eslint:recommended",
+        "airbnb-base",
         "plugin:flowtype/recommended",
-        "plugin:jest/recommended"
+        "plugin:jest/recommended",
+        "prettier",
+        "prettier/flowtype",
+        "prettier/standard"
     ],
     "parserOptions": {
         "sourceType": "module"
     },
     "plugins": [
         "flowtype",
+        "prettier",
         "jest"
     ],
     "rules": {

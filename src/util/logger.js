@@ -10,7 +10,7 @@ const customFormat = printf(info => `[${moment().format('YYYY-MM-DD HH:MM:SS')}]
 const logger = createLogger({
   level: 'debug',
   format: customFormat,
-  transports: [ new transports.Console() ]
+  transports: [new transports.Console()]
 })
 
 module.exports = logger

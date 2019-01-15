@@ -16,7 +16,7 @@ app.use(compression())
 app.use(bodyParser.json())
 
 // logging middleware
-if(process.env.NODE_ENV === 'development') {
+if (process.env.NODE_ENV === 'development') {
   app.use((req, res, next) => {
     logger.debug(`${req.method} ${req.path}`)
     next()
@@ -24,7 +24,7 @@ if(process.env.NODE_ENV === 'development') {
 }
 
 // CORS setup
-if(CLIENT) {
+if (CLIENT) {
   app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', CLIENT)
     res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept')
@@ -44,13 +44,14 @@ app.use('/thread', routeThread)
 app.use((req, res, next) => res.status(404).send('404 Not Found')) // eslint-disable-line no-unused-vars
 
 // error handler
-app.use((err, req, res, next) => {  // eslint-disable-line no-unused-vars
+app.use((err, req, res, next) => {
+  // eslint-disable-line no-unused-vars
   logger.error(err.stack)
 
   const status = err.status || 500
 
   let message
-  if(status === 500) {
+  if (status === 500) {
     message = 'Something broke! :('
   } else {
     message = err.message

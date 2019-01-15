@@ -4,5 +4,21 @@
 			"path": "."
 		}
 	],
-	"settings": {}
+	"settings": {
+		"[javascript]": {
+			"editor.formatOnSave": true
+		},
+		"editor.insertSpaces": true,
+		"editor.tabSize": 2,
+		"files.trimTrailingWhitespace": true,
+		"search.exclude": {
+			"build/": true,
+			"coverage/": true,
+			"flow-typed/": true,
+			"node_modules/": true,
+			".eslintcache": true,
+			"stats.*.json": true,
+			"yarn.lock": true
+		}
+	}
 }

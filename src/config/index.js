@@ -6,7 +6,7 @@ let config = {
   CLIENT: null
 }
 
-if(process.env.NODE_ENV) {
+if (process.env.NODE_ENV) {
   config = {
     ...config,
     ...require(`./${process.env.NODE_ENV}`)
