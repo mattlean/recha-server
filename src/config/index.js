@@ -2,7 +2,7 @@
 
 let config = {
   PORT: 3000,
-  DB_URI: 'mongodb://localhost/nodejs',
+  DB_URI: 'mongodb://localhost/recha',
   CLIENT: null
 }
 

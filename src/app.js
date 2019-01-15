@@ -36,7 +36,7 @@ if(CLIENT) {
   })
 }
 
-app.get('/', (req, res) => res.send('*chan API'))
+app.get('/', (req, res) => res.send('recha-server API'))
 
 app.use('/thread', routeThread)
 
