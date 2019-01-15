@@ -4,17 +4,18 @@ const ServerErr = require('./ServerErr')
 
 const err = {
   genErr(status?: number, message?: string) {
-    if (!message) {
+    let m = message
+    if (!m) {
       switch (status) {
         case 404:
-          message = 'Not found'
+          m = 'Not found'
           break
         default:
-          message = 'Error'
+          m = 'Error'
       }
     }
 
-    return new ServerErr({ message, status })
+    return new ServerErr({ m, status })
   }
 }
 

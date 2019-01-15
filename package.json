@@ -13,8 +13,8 @@
     "build:stats": "yarn run build -- --json > stats.production.json",
     "flow": "flow",
     "flow-typed": "flow-typed",
-    "format": "prettier --write --parser=flow --print-width=120 --semi=false --single-quote \"src/**/*.{js,jsx}\"",
-    "lint": "eslint --cache --ext .js src/",
+    "format": "prettier --write --parser=flow --print-width=120 --semi=false --single-quote \"{config,src}/**/*.{js,jsx}\"",
+    "lint": "eslint --cache --ext .js \"{config,src}/**\"",
     "start": "node build/production/server.js",
     "start:debug": "node --inspect-brk build/production/server.js",
     "start:dev": "node build/development/server.js",
@@ -44,6 +44,7 @@
     "helmet": "^3.15.0",
     "moment": "^2.23.0",
     "mongoose": "^5.4.4",
+    "source-map-support": "^0.5.10",
     "winston": "^3.1.0"
   },
   "devDependencies": {
@@ -69,7 +70,6 @@
     "jest": "^23.6.0",
     "nodemon": "^1.18.9",
     "prettier": "1.15.3",
-    "source-map-support": "^0.5.10",
     "supertest": "^3.3.0",
     "uglifyjs-webpack-plugin": "^2.1.1",
     "webpack": "^4.28.4",

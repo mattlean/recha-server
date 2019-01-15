@@ -25,6 +25,7 @@ if (process.env.NODE_ENV === 'development') {
 
 // CORS setup
 if (CLIENT) {
+  // eslint-disable-next-line no-unused-vars
   app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', CLIENT)
     res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept')
@@ -32,7 +33,7 @@ if (CLIENT) {
       res.header('Access-Control-Allow-Methods', 'POST,PUT')
       return res.status(200).json({})
     }
-    next()
+    return next()
   })
 }
 
@@ -44,8 +45,8 @@ app.use('/thread', routeThread)
 app.use((req, res, next) => res.status(404).send('404 Not Found')) // eslint-disable-line no-unused-vars
 
 // error handler
+// eslint-disable-next-line no-unused-vars
 app.use((err, req, res, next) => {
-  // eslint-disable-line no-unused-vars
   logger.error(err.stack)
 
   const status = err.status || 500
@@ -54,7 +55,7 @@ app.use((err, req, res, next) => {
   if (status === 500) {
     message = 'Something broke! :('
   } else {
-    message = err.message
+    ;({ message } = err)
   }
 
   res.status(status).send(message)

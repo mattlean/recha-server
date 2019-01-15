@@ -2,6 +2,7 @@
 
 class ServerErr extends Error {
   message: string
+
   status: number
 
   constructor(...args: any) {

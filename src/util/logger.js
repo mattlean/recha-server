@@ -1,5 +1,3 @@
-// @flow
-
 const moment = require('moment')
 const { createLogger, format, transports } = require('winston')
 

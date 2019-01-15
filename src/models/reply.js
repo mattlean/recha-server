@@ -1,4 +1,3 @@
-// @flow
 const mongoose = require('mongoose')
 
 const schemaType = 'Reply'
@@ -18,10 +17,11 @@ const schema = new mongoose.Schema(
   {
     toJSON: {
       transform: (doc, ret) => {
-        ret._id = ret._id.toString()
-        ret.createdAt = ret.createdAt.toJSON()
-        ret.type = schemaType
-        return ret
+        const r = ret
+        r._id = r._id.toString()
+        r.createdAt = r.createdAt.toJSON()
+        r.type = schemaType
+        return r
       }
     }
   }

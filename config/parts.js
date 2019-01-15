@@ -13,10 +13,7 @@ exports.checkTypes = () => ({
 
 // Clean paths
 exports.cleanPaths = paths => ({
-  plugins: [new CleanWebpackPlugin(
-    paths,
-    { root: PATHS.root }
-  )]
+  plugins: [new CleanWebpackPlugin(paths, { root: PATHS.root })]
 })
 
 // Create source maps
@@ -39,12 +36,12 @@ exports.loadJS = ({ exclude, include } = {}) => ({
 // Minify JavaScript
 exports.minJS = () => ({
   optimization: {
-    minimizer: [new UglifyWebpackPlugin( { sourceMap: true} )]
+    minimizer: [new UglifyWebpackPlugin({ sourceMap: true })]
   }
 })
 
 // Ignore node_modules dependencies in bundling
-exports.setExternals = () => ({ externals: [ nodeExternals() ] })
+exports.setExternals = () => ({ externals: [nodeExternals()] })
 
 // Set free variable
 exports.setFreeVariable = (key, val) => {

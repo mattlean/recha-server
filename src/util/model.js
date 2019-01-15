@@ -2,9 +2,10 @@
 
 const model = {
   clearReadOnlyProps(data: Object) {
-    delete data.createdAt
+    const d = data
+    delete d.createdAt
 
-    return data
+    return d
   }
 }
 

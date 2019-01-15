@@ -11,7 +11,7 @@ if (process.env.NODE_ENV) {
 
 db.connect(DB_URI)
   .then(() => {
-    const app = require('./app')
+    const app = require('./app') // eslint-disable-line global-require
 
     app.listen(PORT, () => logger.info(`Server listening on port: ${PORT}`))
   })

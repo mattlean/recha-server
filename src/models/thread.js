@@ -28,11 +28,12 @@ const schema = new mongoose.Schema(
   {
     toJSON: {
       transform: (doc, ret) => {
-        delete ret.__v
-        ret._id = ret._id.toString()
-        ret.createdAt = ret.createdAt.toJSON()
-        ret.type = schemaType
-        return ret
+        const r = ret
+        delete r.__v
+        r._id = r._id.toString()
+        r.createdAt = r.createdAt.toJSON()
+        r.type = schemaType
+        return r
       }
     }
   }

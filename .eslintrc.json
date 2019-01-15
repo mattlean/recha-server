@@ -33,6 +33,7 @@
             "error",
             "single"
         ],
+        "no-underscore-dangle": 0,
         "semi": [
             "error",
             "never"

@@ -8,7 +8,7 @@ module.exports = merge([
     output: {
       filename: 'server.js',
       path: `${PATHS.build}/production`
-    },
+    }
   },
 
   parts.cleanPaths(['build/production']),

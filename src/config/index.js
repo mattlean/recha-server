@@ -9,7 +9,7 @@ let config = {
 if (process.env.NODE_ENV) {
   config = {
     ...config,
-    ...require(`./${process.env.NODE_ENV}`)
+    ...require(`./${process.env.NODE_ENV}`) // eslint-disable-line global-require, import/no-dynamic-require
   }
 }
 
