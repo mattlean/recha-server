@@ -1,5 +1,3 @@
-// @flow
-
-module.exports = {
+export = {
   DB_URI: 'mongodb://localhost/recha-test'
 }

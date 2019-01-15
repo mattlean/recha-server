@@ -7,9 +7,9 @@ const productionConfig = require('./config/production')
 
 const commonConfig = merge([
   {
-    entry: `${PATHS.src}/main.js`,
+    entry: `${PATHS.src}/main.ts`,
 
-    resolve: { extensions: ['.js', '.json'] },
+    resolve: { extensions: ['.js', '.json', '.ts'] },
 
     target: 'node'
   },

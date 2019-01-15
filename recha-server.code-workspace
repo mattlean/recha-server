@@ -14,7 +14,6 @@
 		"search.exclude": {
 			"build/": true,
 			"coverage/": true,
-			"flow-typed/": true,
 			"node_modules/": true,
 			".eslintcache": true,
 			"stats.*.json": true,

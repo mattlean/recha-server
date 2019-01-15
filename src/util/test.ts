@@ -1,6 +1,4 @@
-// @flow
-
-const logger = require('./logger')
+import logger = require('./logger')
 
 const test = {
   clearDBCollection(model: string) {
@@ -12,4 +10,4 @@ const test = {
   }
 }
 
-module.exports = test
+export = test

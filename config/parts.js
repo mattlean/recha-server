@@ -1,15 +1,9 @@
 const CleanWebpackPlugin = require('clean-webpack-plugin')
-const FlowWebpackPlugin = require('flow-webpack-plugin')
 const nodeExternals = require('webpack-node-externals')
 const UglifyWebpackPlugin = require('uglifyjs-webpack-plugin')
 const webpack = require('webpack')
 
 const PATHS = require('../PATHS')
-
-// Run Flow type checking
-exports.checkTypes = () => ({
-  plugins: [new FlowWebpackPlugin()]
-})
 
 // Clean paths
 exports.cleanPaths = paths => ({
@@ -19,7 +13,7 @@ exports.cleanPaths = paths => ({
 // Create source maps
 exports.genSourceMaps = ({ type }) => ({ devtool: type })
 
-// Load JavaScript through Babel
+// Load JavaScript & TypeScript through Babel
 exports.loadJS = ({ exclude, include } = {}) => ({
   module: {
     rules: [
@@ -27,7 +21,12 @@ exports.loadJS = ({ exclude, include } = {}) => ({
         use: 'babel-loader',
         exclude,
         include,
-        test: /\.jsx?$/
+        test: /\.(js|ts)$/
+      },
+      {
+        test: /\.js$/,
+        use: ['source-map-loader'],
+        enforce: 'pre'
       }
     ]
   }

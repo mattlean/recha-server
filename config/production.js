@@ -13,8 +13,6 @@ module.exports = merge([
 
   parts.cleanPaths(['build/production']),
 
-  parts.checkTypes(),
-
   parts.minJS(),
 
   parts.genSourceMaps({ type: 'source-map' })

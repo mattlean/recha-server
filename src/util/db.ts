@@ -1,8 +1,6 @@
-// @flow
+import mongoose = require('mongoose')
 
-const mongoose = require('mongoose')
-
-const logger = require('./logger')
+import logger = require('./logger')
 
 const db = {
   connect(uri: string) {
@@ -30,4 +28,4 @@ const db = {
   }
 }
 
-module.exports = db
+export = db

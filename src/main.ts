@@ -1,5 +1,3 @@
-// @flow
-
 const { DB_URI, PORT } = require('./config')
 const { db, logger } = require('./util')
 

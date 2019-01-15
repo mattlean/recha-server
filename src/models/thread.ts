@@ -1,8 +1,6 @@
-// @flow
+import mongoose = require('mongoose')
 
-const mongoose = require('mongoose')
-
-const Reply = require('./reply')
+import Reply = require('./reply')
 
 const schemaType = 'Thread'
 const schema = new mongoose.Schema(
@@ -40,4 +38,4 @@ const schema = new mongoose.Schema(
 )
 schema.virtual('type').get(() => schemaType)
 
-module.exports = mongoose.model(schemaType, schema)
+export = mongoose.model(schemaType, schema)

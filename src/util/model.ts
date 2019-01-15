@@ -1,7 +1,5 @@
-// @flow
-
 const model = {
-  clearReadOnlyProps(data: Object) {
+  clearReadOnlyProps(data) {
     const d = data
     delete d.createdAt
 
@@ -9,4 +7,4 @@ const model = {
   }
 }
 
-module.exports = model
+export = model

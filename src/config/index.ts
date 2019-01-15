@@ -1,5 +1,3 @@
-// @flow
-
 let config = {
   PORT: 3000,
   DB_URI: 'mongodb://localhost/recha',
@@ -13,4 +11,4 @@ if (process.env.NODE_ENV) {
   }
 }
 
-module.exports = config
+export = config

@@ -1,5 +1,3 @@
-// @flow
-
 class ServerErr extends Error {
   message: string
 
@@ -15,4 +13,4 @@ class ServerErr extends Error {
   }
 }
 
-module.exports = ServerErr
+export = ServerErr

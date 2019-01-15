@@ -5,18 +5,17 @@
     },
     "extends": [
         "airbnb-base",
-        "plugin:flowtype/recommended",
         "plugin:jest/recommended",
         "prettier",
-        "prettier/flowtype",
         "prettier/standard"
     ],
+    "parser": "typescript-eslint-parser",
     "parserOptions": {
         "sourceType": "module"
     },
     "plugins": [
-        "flowtype",
         "prettier",
+        "typescript",
         "jest"
     ],
     "rules": {
