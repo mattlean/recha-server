@@ -4,7 +4,6 @@
   "description": "",
   "main": "src/main.js",
   "scripts": {
-    "setup": "yarn && yarn run flow-typed install",
     "build": "webpack --env production",
     "build:debug": "node --inspect-brk node_modules/.bin/webpack --env production",
     "build:dev": "webpack --env development",

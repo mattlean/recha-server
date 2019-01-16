@@ -18,6 +18,13 @@
         "typescript",
         "jest"
     ],
+    "settings": {
+        "import/resolver": {
+            "node": {
+              "extensions": [".js", ".ts"]
+            }
+          }
+    },
     "rules": {
         "indent": [
             "error",
@@ -34,6 +41,10 @@
         ],
         "no-underscore-dangle": 0,
         "semi": [
+            "error",
+            "never"
+        ],
+        "strict": [
             "error",
             "never"
         ]
