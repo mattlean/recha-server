@@ -4,3 +4,4 @@ flow-typed/
 node_modules/
 .eslintcache
 stats.*.json
+yarn-error.log
