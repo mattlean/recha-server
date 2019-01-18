@@ -1,31 +1,16 @@
-import mongoose = require('mongoose')
+import { Pool } from 'pg'
 
-import logger = require('./logger')
+import { CONFIG } from '../types' // eslint-disable-line no-unused-vars
 
-const db = {
-  connect(uri: string) {
-    return mongoose
-      .connect(
-        uri,
-        { useNewUrlParser: true }
-      )
-      .then(() => {
-        const successMsg = `Connected to database: ${uri}`
-        logger.info(successMsg)
-        return successMsg
-      })
-      .catch(err => logger.error(err))
-  },
-
-  disconnect(successMsg: string = 'Disconnected from database') {
-    return mongoose
-      .disconnect()
-      .then(() => {
-        logger.info(successMsg)
-        return successMsg
-      })
-      .catch(err => logger.error(err))
+const createPool = (DB_CONFIG: CONFIG['DB']) => {
+  const pool = {
+    host: DB_CONFIG.HOST,
+    name: DB_CONFIG.NAME,
+    user: DB_CONFIG.USER,
+    password: DB_CONFIG.PASS,
+    port: DB_CONFIG.PORT
   }
+  return new Pool(pool)
 }
 
-export = db
+export { createPool } // eslint-disable-line import/prefer-default-export

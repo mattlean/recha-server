@@ -1,14 +1,36 @@
-let config = {
-  PORT: 3000,
-  DB_URI: 'mongodb://localhost/recha',
-  CLIENT: null
+import { CONFIG } from '../types' // eslint-disable-line no-unused-vars
+
+let configDB: CONFIG['DB'] = {
+  HOST: 'localhost',
+  NAME: 'database',
+  USER: 'username',
+  PASS: 'password',
+  PORT: 5432
 }
 
+let configPort: CONFIG['PORT'] = 3000
+
 if (process.env.NODE_ENV) {
-  config = {
-    ...config,
-    ...require(`./${process.env.NODE_ENV}`) // eslint-disable-line global-require, import/no-dynamic-require
+  const { DB, PORT } = require(`./${process.env.NODE_ENV}`) // eslint-disable-line global-require, import/no-dynamic-require
+
+  configDB = {
+    ...configDB,
+    ...DB
+  }
+
+  configPort = PORT
+}
+
+export const API = {
+  NAME: 'recha',
+  VERS: {
+    V1: {
+      NUM: 1,
+      PATH: '/v1/'
+    }
   }
 }
 
-export = config
+export const DB = configDB
+
+export const PORT = configPort

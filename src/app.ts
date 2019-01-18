@@ -4,8 +4,9 @@ import helmet from 'helmet'
 import { json } from 'body-parser'
 import 'source-map-support/register'
 
+import { API } from './config'
 import { logger } from './util'
-// const routeThread = require('./routes/thread')
+import routeV1 from './routes/v1'
 // const { CLIENT } = require('./config')
 
 const app = express()
@@ -36,9 +37,14 @@ if (process.env.NODE_ENV === 'development') {
 //   })
 // }
 
-app.get('/', (req, res) => res.send('recha-server API'))
+app.get('/', (req, res) =>
+  res.json({
+    API: API.NAME,
+    ENV: process.env.NODE_ENV
+  })
+)
 
-// app.use('/thread', routeThread)
+app.use(`${API.VERS.V1.PATH}`, routeV1)
 
 // 404
 app.use((req, res, next) => res.status(404).send('404 Not Found')) // eslint-disable-line no-unused-vars
