@@ -14,7 +14,7 @@
     "lint": "eslint --cache --ext .js,.ts \"{config,src}/**\"",
     "start": "node build/production/server.js",
     "start:debug": "node --inspect-brk build/production/server.js",
-    "start:dev": "node build/development/server.js",
+    "start:dev": "node --trace-sync-io build/development/server.js",
     "start:dev:debug": "node --inspect-brk build/development/server.js",
     "start:dev:watch": "nodemon --exec \"yarn run build:dev && yarn run start:dev\"",
     "start:dev:watch:debug": "nodemon --exec \"yarn run build:dev && yarn run start:dev:debug\"",

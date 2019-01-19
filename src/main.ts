@@ -1,5 +1,5 @@
 import app from './app'
-import { PORT } from './config'
+import { API, PORT } from './config'
 import { logger } from './util'
 
 if (process.env.NODE_ENV) {
@@ -8,4 +8,4 @@ if (process.env.NODE_ENV) {
   logger.warn(`Environment: ${process.env.NODE_ENV}`)
 }
 
-app.listen(PORT, () => logger.info(`recha-server listening on port: ${PORT}`))
+app.listen(PORT, () => logger.info(`${API.NAME} listening on port: ${PORT}`))
