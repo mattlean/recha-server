@@ -13,4 +13,4 @@ class ServerErr extends Error {
   }
 }
 
-export = ServerErr
+export default ServerErr

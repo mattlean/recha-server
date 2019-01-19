@@ -1,65 +1,40 @@
 import { Router } from 'express'
 
+import { pool } from '../../app'
+import { createUser, deleteUser, getUserById, getUsers, updateUser } from '../../util/db'
+
 const router = Router()
 
-router.get('/', (req, res) =>
-  res.json({
-    hello: 'world'
-  })
+router.get('/', (req, res, next) =>
+  getUsers(pool)
+    .then(result => res.json(result))
+    .catch(err => next(err))
 )
 
-// const Thread = require('../models/thread')
-// const { genErr } = require('../util').err
-// const { clearReadOnlyProps } = require('../util').model
+router.get('/:id', (req, res, next) =>
+  getUserById(pool, req.params.id)
+    .then(result => res.json(result))
+    .catch(err => next(err))
+)
 
-// const router = express.Router()
+router.post('/', (req, res, next) => {
+  const { email, name } = req.body
+  createUser(pool, { email, name })
+    .then(result => res.status(201).json(result))
+    .catch(err => next(err))
+})
 
-// // Create thread
-// router.post('/', (req, res, next) => {
-//   req.body = clearReadOnlyProps(req.body)
-//   if (req.body.replies) delete req.body.replies
+router.put('/:id', (req, res, next) => {
+  const { email, name } = req.body
+  updateUser(pool, req.params.id, { email, name })
+    .then(result => res.json(result))
+    .catch(err => next(err))
+})
 
-//   Thread.create(req.body)
-//     .then(thread => res.json(thread))
-//     .catch(err => next(err))
-// })
-
-// // List threads
-// router.get('/', (req, res, next) => {
-//   Thread.find()
-//     .sort({ createdAt: -1 })
-//     .exec()
-//     .then(threads => res.json(threads))
-//     .catch(err => next(err))
-// })
-
-// // Read thread
-// router.get('/:id', (req, res, next) => {
-//   Thread.findById(req.params.id)
-//     .exec()
-//     .then(thread => {
-//       if (!thread) throw genErr(404)
-
-//       return res.json(thread)
-//     })
-//     .catch(err => next(err))
-// })
-
-// // Create reply
-// router.post('/:id/reply', (req, res, next) => {
-//   req.body = clearReadOnlyProps(req.body)
-
-//   Thread.findById(req.params.id)
-//     .exec()
-//     .then(thread => {
-//       if (!thread) throw genErr(404)
-
-//       thread.replies.push({ comment: req.body.comment })
-
-//       return thread.save()
-//     })
-//     .then(thread => res.json(thread))
-//     .catch(err => next(err))
-// })
+router.delete('/:id', (req, res, next) => {
+  deleteUser(pool, req.params.id)
+    .then(result => res.json(result))
+    .catch(err => next(err))
+})
 
 export default router

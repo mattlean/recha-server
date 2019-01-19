@@ -1,3 +1,5 @@
+/* eslint import/prefer-default-export: 0 */
 import CONFIG from './CONFIG'
+import User from './User'
 
-export { CONFIG } // eslint-disable-line import/prefer-default-export
+export { CONFIG, User }

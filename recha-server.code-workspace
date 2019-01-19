@@ -13,7 +13,6 @@
 		"search.exclude": {
 			"build/": true,
 			"coverage/": true,
-			"node_modules/": true,
 			".eslintcache": true,
 			"stats.*.json": true,
 			"yarn.lock": true

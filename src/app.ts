@@ -4,7 +4,8 @@ import helmet from 'helmet'
 import { json } from 'body-parser'
 import 'source-map-support/register'
 
-import { API } from './config'
+import { API, DB } from './config'
+import { createPool } from './util/db'
 import { logger } from './util'
 import routeV1 from './routes/v1'
 // const { CLIENT } = require('./config')
@@ -47,23 +48,25 @@ app.get('/', (req, res) =>
 app.use(`${API.VERS.V1.PATH}`, routeV1)
 
 // 404
-app.use((req, res, next) => res.status(404).send('404 Not Found')) // eslint-disable-line no-unused-vars
+app.use((req, res, next) => res.status(404).send('Not found')) // eslint-disable-line no-unused-vars
 
 // error handler
 // eslint-disable-next-line no-unused-vars
-// app.use((err, req, res, next) => {
-//   logger.error(err.stack)
+app.use((err, req, res, next) => {
+  logger.error(err.stack)
 
-//   const status = err.status || 500
+  const status = err.status || 500
 
-//   let message
-//   if (status === 500) {
-//     message = 'Something broke! :('
-//   } else {
-//     ;({ message } = err)
-//   }
+  let message
+  if (status === 500) {
+    message = 'Something broke! :('
+  } else {
+    ;({ message } = err)
+  }
 
-//   res.status(status).send(message)
-// })
+  res.status(status).send(message)
+})
 
 export default app
+
+export const pool = createPool(DB, app)
