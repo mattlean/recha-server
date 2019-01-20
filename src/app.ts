@@ -6,7 +6,7 @@ import 'source-map-support/register'
 
 import { API, DB } from './config'
 import { createPool } from './util/db'
-import { logger } from './util'
+import { genApiData, logger } from './util'
 import routeV1 from './routes/v1'
 // const { CLIENT } = require('./config')
 
@@ -38,12 +38,7 @@ if (process.env.NODE_ENV === 'development') {
 //   })
 // }
 
-app.get('/', (req, res) =>
-  res.json({
-    API: API.NAME,
-    ENV: process.env.NODE_ENV
-  })
-)
+app.get('/', (req, res) => res.json(genApiData()))
 
 app.use(`${API.VERS.V1.PATH}`, routeV1)
 

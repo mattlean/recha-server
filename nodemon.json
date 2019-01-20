@@ -1,5 +1,5 @@
 {
   "ext": "js,ts",
-  "ignore": ["*.test.ts"],
+  "ignore": ["*.test.js", "*.test.ts"],
   "watch": ["config", "src", "webpack.config.js"]
 }
