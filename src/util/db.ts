@@ -3,8 +3,9 @@
 import { Application } from 'express' // eslint-disable-line no-unused-vars
 import { Pool, QueryResult } from 'pg' // eslint-disable-line no-unused-vars
 
-import { CONFIG, User } from '../types' // eslint-disable-line no-unused-vars
-import { genErr } from '../util/err'
+import { CONFIG } from '../types' // eslint-disable-line no-unused-vars
+import { UserData } from '../types/User' // eslint-disable-line no-unused-vars
+import { genErr } from './err'
 
 // Create node-postgres connection pool
 // If Express app is passed, assign pool to app's local variables
@@ -27,7 +28,7 @@ export const createPool = (DB_CONFIG: CONFIG['DB'], app: Application): Pool => {
   return newPool
 }
 
-export const createUser = (pool: Pool, data: User): Promise<QueryResult['rows']> =>
+export const createUser = (pool: Pool, data: UserData): Promise<QueryResult['rows']> =>
   pool
     .query('INSERT INTO users (name, email) VALUES ($1, $2) RETURNING *', [data.name, data.email])
     .then(result => result.rows[0])
@@ -53,7 +54,7 @@ export const getUserById = (pool: Pool, id: number): Promise<QueryResult['rows']
 export const getUsers = (pool: Pool): Promise<QueryResult['rows']> =>
   pool.query('SELECT * FROM users ORDER BY id ASC').then(result => result.rows)
 
-export const updateUser = (pool: Pool, id: number, data: User): Promise<QueryResult['rows']> =>
+export const updateUser = (pool: Pool, id: number, data: UserData): Promise<QueryResult['rows']> =>
   pool
     .query('UPDATE users SET name = $1, EMAIL = $2 WHERE id = $3 RETURNING *', [data.name, data.email, id])
     .then(result => result.rows[0])
