@@ -1,5 +1,4 @@
 /* eslint import/prefer-default-export: 0 */
-
 import { Application } from 'express' // eslint-disable-line no-unused-vars
 import { Pool, QueryResult } from 'pg' // eslint-disable-line no-unused-vars
 

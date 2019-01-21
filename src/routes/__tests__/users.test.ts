@@ -10,24 +10,31 @@ const p = createPool(DB)
 
 beforeAll(() => clearDBTable(p, 'users'))
 
-afterAll(() => p.end())
+afterAll(() => {
+  clearDBTable(p, 'users')
+  p.end()
+})
 
 describe('User endpoints', () => {
   const ENDPOINT = `${API.VERS.V1.PATH}users`
-  let user
-  const userData: UserData = {
+  const NEW_USER_DATA: UserData = {
     email: 'foo@bar.com',
     name: 'Foo'
   }
+  const UPDATED_USER_DATA: UserData = {
+    email: 'baz@bar.com',
+    name: 'Baz'
+  }
+  let user
 
   it('should create a user', () =>
     request(app)
       .post(ENDPOINT)
-      .send(userData)
+      .send(NEW_USER_DATA)
       .then(res => {
         expect(res.statusCode).toBe(201)
-        expect(res.body.email).toBe(userData.email)
-        expect(res.body.name).toBe(userData.name)
+        expect(res.body.email).toBe(NEW_USER_DATA.email)
+        expect(res.body.name).toBe(NEW_USER_DATA.name)
         user = res.body
       }))
 
@@ -46,7 +53,30 @@ describe('User endpoints', () => {
       .get(`${ENDPOINT}/${user.id}`)
       .then(res => {
         expect(res.statusCode).toBe(200)
-        expect(res.body.email).toBe(userData.email)
-        expect(res.body.name).toBe(userData.name)
+        expect(res.body.email).toBe(NEW_USER_DATA.email)
+        expect(res.body.name).toBe(NEW_USER_DATA.name)
+      }))
+
+  it('should update a specific user', () =>
+    request(app)
+      .put(`${ENDPOINT}/${user.id}`)
+      .send(UPDATED_USER_DATA)
+      .then(res => {
+        expect(res.statusCode).toBe(200)
+        expect(res.body.email).toBe(UPDATED_USER_DATA.email)
+        expect(res.body.name).toBe(UPDATED_USER_DATA.name)
+      }))
+
+  it('should delete a specific user', () =>
+    request(app)
+      .del(`${ENDPOINT}/${user.id}`)
+      .then(res => {
+        expect(res.statusCode).toBe(200)
+
+        return request(app)
+          .get(`${ENDPOINT}/${user.id}`)
+          .then(res2 => {
+            expect(res2.statusCode).toBe(404)
+          })
       }))
 })
