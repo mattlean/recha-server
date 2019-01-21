@@ -9,7 +9,7 @@ import { genErr } from './err'
 
 // Create node-postgres connection pool
 // If Express app is passed, assign pool to app's local variables
-export const createPool = (DB_CONFIG: CONFIG['DB'], app: Application): Pool => {
+export const createPool = (DB_CONFIG: CONFIG['DB'], app?: Application): Pool => {
   const POOL_CONFIG = {
     database: DB_CONFIG.NAME,
     host: DB_CONFIG.HOST,

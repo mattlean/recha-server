@@ -1,8 +1,7 @@
+import request from 'supertest'
+
 import app from '../app'
-
-const request = require('supertest')
-
-const { genApiData } = require('../util')
+import { genApiData } from '../util'
 
 describe('Root endpoint', () => {
   it('should respond to GET request with 200 and API data', () =>

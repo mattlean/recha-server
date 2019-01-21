@@ -1,13 +1,10 @@
-import logger = require('./logger')
+/* eslint import/prefer-default-export: 0 */
+import { Pool, QueryResult } from 'pg' // eslint-disable-line no-unused-vars
 
-const test = {
-  clearDBCollection(model: string) {
-    const Model = require(`../models/${model}`) // eslint-disable-line global-require, import/no-dynamic-require
-
-    return Model.remove({})
-      .exec()
-      .catch(err => logger.error(err))
+export const clearDBTable = (pool: Pool, table: string): Promise<QueryResult['rows']> => {
+  if (process.env.NODE_ENV === 'test') {
+    return pool.query(`DELETE FROM ${table} RETURNING *`).then(result => result.rows)
   }
-}
 
-export = test
+  throw new Error('Invalid environment')
+}

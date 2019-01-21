@@ -40,7 +40,6 @@
     "express": "^4.16.4",
     "helmet": "^3.15.0",
     "moment": "^2.23.0",
-    "mongoose": "^5.4.4",
     "pg": "^7.8.0",
     "source-map-support": "^0.5.10",
     "winston": "^3.1.0"
@@ -57,7 +56,6 @@
     "@types/express": "^4.16.0",
     "@types/helmet": "^0.0.42",
     "@types/jest": "^23.3.12",
-    "@types/mongoose": "^5.3.7",
     "@types/node": "^10.12.18",
     "@types/pg": "^7.4.11",
     "babel-core": "^7.0.0-bridge.0",
