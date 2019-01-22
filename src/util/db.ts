@@ -6,6 +6,15 @@ import { CONFIG } from '../types' // eslint-disable-line no-unused-vars
 import { UserData } from '../types/User' // eslint-disable-line no-unused-vars
 import { genErr } from './err'
 
+export const applyDefaultProps = (data: Array<Object> | Object, type: string) => {
+  const transform = (d: Object): Object => ({ ...d, type })
+
+  if (Array.isArray(data)) {
+    return data.map(ele => transform(ele))
+  }
+  return transform(data)
+}
+
 // Create node-postgres connection pool
 // If Express app is passed, assign pool to app's local variables
 export const createPool = (DB_CONFIG: CONFIG['DB'], app?: Application): Pool => {
