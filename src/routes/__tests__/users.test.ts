@@ -17,6 +17,7 @@ afterAll(() => {
 
 describe('User endpoints', () => {
   const ENDPOINT = `${API.VERS.V1.PATH}users`
+  const TYPE = 'User'
   const NEW_USER_DATA: UserData = {
     email: 'foo@bar.com',
     name: 'Foo'
@@ -35,6 +36,7 @@ describe('User endpoints', () => {
         expect(res.statusCode).toBe(201)
         expect(res.body.email).toBe(NEW_USER_DATA.email)
         expect(res.body.name).toBe(NEW_USER_DATA.name)
+        expect(res.body.type).toBe(TYPE)
         user = res.body
       }))
 
@@ -46,6 +48,7 @@ describe('User endpoints', () => {
         expect(res.body).toBeInstanceOf(Array)
         expect(res.body[0].email).toBe(user.email)
         expect(res.body[0].name).toBe(user.name)
+        expect(res.body[0].type).toBe(TYPE)
       }))
 
   it('should read a specific user', () =>
@@ -55,6 +58,7 @@ describe('User endpoints', () => {
         expect(res.statusCode).toBe(200)
         expect(res.body.email).toBe(NEW_USER_DATA.email)
         expect(res.body.name).toBe(NEW_USER_DATA.name)
+        expect(res.body.type).toBe(TYPE)
       }))
 
   it('should update a specific user', () =>
@@ -65,6 +69,7 @@ describe('User endpoints', () => {
         expect(res.statusCode).toBe(200)
         expect(res.body.email).toBe(UPDATED_USER_DATA.email)
         expect(res.body.name).toBe(UPDATED_USER_DATA.name)
+        expect(res.body.type).toBe(TYPE)
       }))
 
   it('should delete a specific user', () =>
@@ -72,6 +77,9 @@ describe('User endpoints', () => {
       .del(`${ENDPOINT}/${user.id}`)
       .then(res => {
         expect(res.statusCode).toBe(200)
+        expect(res.body.email).toBe(UPDATED_USER_DATA.email)
+        expect(res.body.name).toBe(UPDATED_USER_DATA.name)
+        expect(res.body.type).toBe(TYPE)
 
         return request(app)
           .get(`${ENDPOINT}/${user.id}`)

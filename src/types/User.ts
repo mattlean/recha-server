@@ -5,4 +5,5 @@ export interface UserData {
 
 export default interface User extends UserData {
   id: number
+  type: 'User'
 }
