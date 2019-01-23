@@ -11,7 +11,7 @@ let configDB: CONFIG['DB'] = {
 let configPort: CONFIG['PORT'] = 3000
 
 if (process.env.NODE_ENV) {
-  const { DB, PORT } = require(`./${process.env.NODE_ENV}`) // eslint-disable-line global-require, import/no-dynamic-require
+  const { DB, PORT } = require(`./${process.env.NODE_ENV}`) // eslint-disable-line global-require, import/no-dynamic-require, @typescript-eslint/no-var-requires
 
   configDB = {
     ...configDB,

@@ -1,15 +1,13 @@
 class ServerErr extends Error {
-  message: string
+  public message: string
 
-  status: number
+  public status: number
 
-  constructor(...args: any) {
-    super(args)
+  public constructor(message, status) {
+    super(message)
 
-    if (typeof args[0] === 'object') {
-      if (args[0].message) this.message = args[0].message
-      if (args[0].status) this.status = args[0].status
-    }
+    if (message) this.message = message
+    if (status) this.status = status
   }
 }
 

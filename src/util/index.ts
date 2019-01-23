@@ -4,14 +4,14 @@ import * as err from './err'
 import logger from './logger'
 import { API } from '../config'
 
-interface apiData {
+interface ApiData {
   API: string
   ENV: string
   VER?: number
 }
 
-const genApiData = (ver?: number): apiData => {
-  const data: apiData = {
+const genApiData = (ver?: number): ApiData => {
+  const data: ApiData = {
     API: API.NAME,
     ENV: process.env.NODE_ENV
   }

@@ -1,7 +1,7 @@
 /* eslint import/prefer-default-export: 0 */
 import ServerErr from './ServerErr'
 
-export const genErr = (status?: number, message?: string) => {
+export const genErr = (status?: number, message?: string): ServerErr => {
   let m = message
   if (!m) {
     switch (status) {
@@ -13,5 +13,5 @@ export const genErr = (status?: number, message?: string) => {
     }
   }
 
-  return new ServerErr({ message: m, status })
+  return new ServerErr(m, status)
 }

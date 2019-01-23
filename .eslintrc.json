@@ -6,25 +6,15 @@
     "extends": [
         "airbnb-base",
         "plugin:jest/recommended",
-        "prettier",
-        "prettier/standard"
+        "prettier"
     ],
-    "parser": "typescript-eslint-parser",
     "parserOptions": {
         "sourceType": "module"
     },
     "plugins": [
         "prettier",
-        "typescript",
         "jest"
     ],
-    "settings": {
-        "import/resolver": {
-            "node": {
-              "extensions": [".js", ".ts"]
-            }
-          }
-    },
     "rules": {
         "indent": [
             "error",
@@ -35,11 +25,11 @@
             "error",
             "unix"
         ],
+        "no-underscore-dangle": 0,
         "quotes": [
             "error",
             "single"
         ],
-        "no-underscore-dangle": 0,
         "semi": [
             "error",
             "never"

@@ -6,7 +6,7 @@ import { CONFIG } from '../types' // eslint-disable-line no-unused-vars
 import { UserData } from '../types/User' // eslint-disable-line no-unused-vars
 import { genErr } from './err'
 
-export const applyDefaultProps = (data: Array<Object> | Object, type: string) => {
+export const applyDefaultProps = (data: Array<Object> | Object, type: string): Array<Object> | Object => {
   const transform = (d: Object): Object => ({ ...d, type })
 
   if (Array.isArray(data)) {
