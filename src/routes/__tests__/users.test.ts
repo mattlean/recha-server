@@ -4,7 +4,7 @@ import app from '../../app'
 import { API, DB } from '../../config'
 import { clearDBTable } from '../../util/test'
 import { createPool } from '../../util/db'
-import { UserData } from '../../types/User' // eslint-disable-line no-unused-vars
+import { UserData } from '../../types/User'
 
 const p = createPool(DB)
 

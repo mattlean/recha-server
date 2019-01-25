@@ -1,4 +1,4 @@
-import { CONFIG } from '../types' // eslint-disable-line no-unused-vars
+import { CONFIG } from '../types'
 
 if (process.env.NODE_ENV === 'production') {
   if (!process.env.DB_HOST) throw new Error('DB_HOST must be explicitly defined when running in production mode')

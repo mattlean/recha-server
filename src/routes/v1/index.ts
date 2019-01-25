@@ -1,12 +1,12 @@
 import { Router } from 'express'
 
-import users from './users'
+import todos from './todos'
 import { API } from '../../config'
 import { genApiData } from '../../util'
 
 const router = Router()
 
-router.use('/users', users)
+router.use('/todos', todos)
 
 router.get('/', (req, res) => res.json(genApiData(API.VERS.V1.NUM)))
 

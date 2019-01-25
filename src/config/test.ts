@@ -1,5 +1,5 @@
 /* eslint import/prefer-default-export: 0 */
-import { CONFIG } from '../types' // eslint-disable-line no-unused-vars
+import { CONFIG } from '../types'
 
 export const DB: CONFIG['DB'] = {
   HOST: 'localhost',

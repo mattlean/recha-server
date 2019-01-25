@@ -1,40 +1,40 @@
 import { Router } from 'express'
 
 import { pool } from '../../app'
-import { applyDefaultProps, createUser, deleteUser, getUserById, getUsers, updateUser } from '../../util/db'
+import { applyDefaultProps, createTodo, deleteTodo, getTodoById, getTodos, updateTodo } from '../../util/db'
 
 const router = Router()
 
-const TYPE = 'User'
+const TYPE = 'Todo'
 
 router.get('/', (req, res, next) =>
-  getUsers(pool)
+  getTodos(pool)
     .then(result => res.json(applyDefaultProps(result, TYPE)))
     .catch(err => next(err))
 )
 
 router.get('/:id', (req, res, next) =>
-  getUserById(pool, req.params.id)
+  getTodoById(pool, req.params.id)
     .then(result => res.json(applyDefaultProps(result, TYPE)))
     .catch(err => next(err))
 )
 
 router.post('/', (req, res, next) => {
-  const { email, name } = req.body
-  createUser(pool, { email, name })
+  const { name, text } = req.body
+  createTodo(pool, { name, text })
     .then(result => res.status(201).json(applyDefaultProps(result, TYPE)))
     .catch(err => next(err))
 })
 
 router.put('/:id', (req, res, next) => {
-  const { email, name } = req.body
-  updateUser(pool, req.params.id, { email, name })
+  const { name, text } = req.body
+  updateTodo(pool, req.params.id, { name, text })
     .then(result => res.json(applyDefaultProps(result, TYPE)))
     .catch(err => next(err))
 })
 
 router.delete('/:id', (req, res, next) => {
-  deleteUser(pool, req.params.id)
+  deleteTodo(pool, req.params.id)
     .then(result => res.json(applyDefaultProps(result, TYPE)))
     .catch(err => next(err))
 })

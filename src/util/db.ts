@@ -1,9 +1,9 @@
 /* eslint import/prefer-default-export: 0 */
-import { Application } from 'express' // eslint-disable-line no-unused-vars
-import { Pool, QueryResult } from 'pg' // eslint-disable-line no-unused-vars
+import { Application } from 'express'
+import { Pool, QueryResult } from 'pg'
 
-import { CONFIG } from '../types' // eslint-disable-line no-unused-vars
-import { UserData } from '../types/User' // eslint-disable-line no-unused-vars
+import { CONFIG } from '../types'
+import { TodoData } from '../types/Todo'
 import { genErr } from './err'
 
 export const applyDefaultProps = (data: object[] | object, type: string): object[] | object => {
@@ -36,13 +36,13 @@ export const createPool = (DB_CONFIG: CONFIG['DB'], app?: Application): Pool => 
   return newPool
 }
 
-export const createUser = (pool: Pool, data: UserData): Promise<QueryResult['rows']> =>
+export const createTodo = (pool: Pool, data: TodoData): Promise<QueryResult['rows']> =>
   pool
-    .query('INSERT INTO users (name, email) VALUES ($1, $2) RETURNING *', [data.name, data.email])
+    .query('INSERT INTO todos (name, text) VALUES ($1, $2) RETURNING *', [data.name, data.text])
     .then(result => result.rows[0])
 
-export const deleteUser = (pool: Pool, id: number): Promise<QueryResult> =>
-  pool.query('DELETE FROM users WHERE id = $1 RETURNING *', [id]).then(result => {
+export const deleteTodo = (pool: Pool, id: number): Promise<QueryResult> =>
+  pool.query('DELETE FROM todos WHERE id = $1 RETURNING *', [id]).then(result => {
     if (result.rowCount === 0) {
       throw genErr(404)
     }
@@ -50,8 +50,8 @@ export const deleteUser = (pool: Pool, id: number): Promise<QueryResult> =>
     return result.rows[0]
   })
 
-export const getUserById = (pool: Pool, id: number): Promise<QueryResult['rows']> =>
-  pool.query('SELECT * FROM users WHERE id = $1', [id]).then(result => {
+export const getTodoById = (pool: Pool, id: number): Promise<QueryResult['rows']> =>
+  pool.query('SELECT * FROM todos WHERE id = $1', [id]).then(result => {
     if (result.rowCount === 0) {
       throw genErr(404)
     }
@@ -59,10 +59,10 @@ export const getUserById = (pool: Pool, id: number): Promise<QueryResult['rows']
     return result.rows[0]
   })
 
-export const getUsers = (pool: Pool): Promise<QueryResult['rows']> =>
-  pool.query('SELECT * FROM users ORDER BY id ASC').then(result => result.rows)
+export const getTodos = (pool: Pool): Promise<QueryResult['rows']> =>
+  pool.query('SELECT * FROM todos ORDER BY id ASC').then(result => result.rows)
 
-export const updateUser = (pool: Pool, id: number, data: UserData): Promise<QueryResult['rows']> =>
+export const updateTodo = (pool: Pool, id: number, data: TodoData): Promise<QueryResult['rows']> =>
   pool
-    .query('UPDATE users SET name = $1, EMAIL = $2 WHERE id = $3 RETURNING *', [data.name, data.email, id])
+    .query('UPDATE todos SET name = $1, text = $2 WHERE id = $3 RETURNING *', [data.name, data.text, id])
     .then(result => result.rows[0])

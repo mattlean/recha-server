@@ -1,5 +1,5 @@
 /* eslint import/prefer-default-export: 0 */
-import { Pool, QueryResult } from 'pg' // eslint-disable-line no-unused-vars
+import { Pool, QueryResult } from 'pg'
 
 export const clearDBTable = (pool: Pool, table: string): Promise<QueryResult['rows']> => {
   if (process.env.NODE_ENV === 'test') {

@@ -1,4 +1,4 @@
-import { CONFIG } from '../types' // eslint-disable-line no-unused-vars
+import { CONFIG } from '../types'
 
 let configDB: CONFIG['DB'] = {
   HOST: 'localhost',
