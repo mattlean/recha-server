@@ -15,6 +15,11 @@ export const applyDefaultProps = (data: object[] | object, type: string): object
   return transform(data)
 }
 
+export const completeTodo = (pool: Pool, id: number, completed_at: string): Promise<QueryResult['rows']> =>
+  pool
+    .query('UPDATE todos SET completed_at = $2 WHERE id = $1 RETURNING *', [id, completed_at])
+    .then(result => result.rows[0])
+
 // Create node-postgres connection pool
 // If Express app is passed, assign pool to app's local variables
 export const createPool = (DB_CONFIG: CONFIG['DB'], app?: Application): Pool => {
@@ -62,7 +67,7 @@ export const getTodoById = (pool: Pool, id: number): Promise<QueryResult['rows']
 export const getTodos = (pool: Pool): Promise<QueryResult['rows']> =>
   pool.query('SELECT * FROM todos ORDER BY id ASC').then(result => result.rows)
 
-export const updateTodo = (pool: Pool, id: number, data: TodoData): Promise<QueryResult['rows']> =>
+export const updateTodoInfo = (pool: Pool, id: number, data: TodoData): Promise<QueryResult['rows']> =>
   pool
-    .query('UPDATE todos SET name = $1, text = $2 WHERE id = $3 RETURNING *', [data.name, data.text, id])
+    .query('UPDATE todos SET name = $2, text = $3 WHERE id = $1 RETURNING *', [id, data.name, data.text])
     .then(result => result.rows[0])

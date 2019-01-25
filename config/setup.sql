@@ -10,7 +10,7 @@ $$ LANGUAGE plpgsql;
 
 CREATE TABLE todos (
   id SERIAL PRIMARY KEY,
-  name VARCHAR(280),
+  name VARCHAR(280) NOT NULL,
   text VARCHAR(1024),
   completed_at TIMESTAMPTZ,
   updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
