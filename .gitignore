@@ -1,6 +1,5 @@
 build/
 coverage/
-flow-typed/
 node_modules/
 src/config/development.ts
 .eslintcache
