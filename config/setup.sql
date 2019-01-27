@@ -1,13 +1,5 @@
 SET timezone = 'UTC'
 
-CREATE OR REPLACE FUNCTION trigger_set_timestamp()
-RETURNS TRIGGER AS $$
-BEGIN
-  NEW.updated_at = NOW();
-  RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
-
 CREATE TABLE todos (
   id SERIAL PRIMARY KEY,
   name VARCHAR(280) NOT NULL,
@@ -16,6 +8,19 @@ CREATE TABLE todos (
   updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
+
+CREATE OR REPLACE FUNCTION trigger_set_timestamp()
+RETURNS TRIGGER AS $$
+BEGIN
+  NEW.updated_at = NOW();
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER set_timestamp
+BEFORE UPDATE ON todos
+FOR EACH ROW
+EXECUTE PROCEDURE trigger_set_timestamp();
 
 -- GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO me;
 

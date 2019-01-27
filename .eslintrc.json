@@ -27,7 +27,7 @@
         ],
         "no-underscore-dangle": 0,
         "quotes": [
-            "error",
+            "warn",
             "single"
         ],
         "semi": [

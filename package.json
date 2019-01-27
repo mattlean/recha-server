@@ -11,7 +11,7 @@
     "build:dev:stats": "yarn run build:dev -- --json > stats.development.json",
     "build:stats": "yarn run build -- --json > stats.production.json",
     "format": "prettier --write --parser=typescript --print-width=120 --semi=false --single-quote \"{config,src}/**/*.{js,jsx}\"",
-    "lint": "eslint --cache \"{config,src}/**/*.js\"",
+    "lint": "eslint --cache \"{config,src}/**/*.{js,ts}\"",
     "start": "node build/production/server.js",
     "start:debug": "node --inspect-brk build/production/server.js",
     "start:dev": "node --trace-sync-io build/development/server.js",

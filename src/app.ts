@@ -64,4 +64,7 @@ app.use((err, req, res, next) => {
 
 export default app
 
-export const pool = createPool(DB, app)
+export const pool = (() => {
+  logger.info(`Database: ${DB.HOST}:${DB.PORT}/${DB.NAME}`)
+  return createPool(DB, app)
+})()
