@@ -1,9 +1,9 @@
 import request from 'supertest'
 
-import app, { pool } from '../../app'
-import { API, DB } from '../../config'
-import { clearDBTable } from '../../util/test'
-import { TodoData } from '../../types/Todo'
+import app, { pool } from '../../../app'
+import { API, DB } from '../../../config'
+import { clearDBTable } from '../../../util/test'
+import { TodoData } from '../../../types/Todo'
 
 const TABLE = 'todos'
 const ENDPOINT = `${API.VERS.V1.PATH}${TABLE}`
