@@ -63,7 +63,12 @@ module.exports = {
   // ],
 
   // An array of file extensions your modules use
-  moduleFileExtensions: ['js', 'json', 'node', 'ts'],
+  moduleFileExtensions: [
+    "js",
+    "json",
+    "node",
+    "ts"
+  ],
 
   // A map from regular expressions to module names that allow to stub out resources with a single module
   // moduleNameMapper: {},
@@ -78,7 +83,7 @@ module.exports = {
   // notifyMode: "always",
 
   // A preset that is used as a base for Jest's configuration
-  preset: 'ts-jest',
+  preset: "ts-jest",
 
   // Run tests from one or more projects
   // projects: null,
@@ -119,7 +124,7 @@ module.exports = {
   // snapshotSerializers: [],
 
   // The test environment that will be used for testing
-  testEnvironment: 'node',
+  testEnvironment: "node",
 
   // Options that will be passed to the testEnvironment
   // testEnvironmentOptions: {},
@@ -134,7 +139,11 @@ module.exports = {
   // ],
 
   // An array of regexp pattern strings that are matched against all test paths, matched tests are skipped
-  testPathIgnorePatterns: ['/node_modules/', '/src/config/test.ts', '/src/util/test.ts']
+  testPathIgnorePatterns: [
+    "/node_modules/",
+    "/src/config/test.ts",
+    "/src/util/test.ts"
+  ],
 
   // The regexp pattern Jest uses to detect test files
   // testRegex: "",
@@ -170,4 +179,4 @@ module.exports = {
 
   // Whether to use watchman for file crawling
   // watchman: true,
-}
+};

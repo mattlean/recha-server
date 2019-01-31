@@ -1,8 +1,25 @@
 {
-  "rules": {
-    "import/no-extraneous-dependencies": [
-      "error",
-      { "devDependencies": true }
-    ]
-  }
+    "rules": {
+        "import/no-extraneous-dependencies": [
+            "error",
+            { "devDependencies": true }
+        ],
+        "indent": [
+            "error",
+            2,
+            { "SwitchCase": 1 }
+        ],
+        "linebreak-style": [
+            "error",
+            "unix"
+        ],
+        "quotes": [
+            "warn",
+            "single"
+        ],
+        "semi": [
+            "error",
+            "never"
+        ]
+    }
 }

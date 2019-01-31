@@ -5,8 +5,8 @@
     },
     "extends": [
         "airbnb-base",
-        "plugin:jest/recommended",
-        "prettier"
+        "prettier",
+        "plugin:jest/recommended"
     ],
     "parserOptions": {
         "sourceType": "module"
@@ -25,16 +25,11 @@
             "error",
             "unix"
         ],
-        "no-underscore-dangle": 0,
         "quotes": [
             "warn",
             "single"
         ],
         "semi": [
-            "error",
-            "never"
-        ],
-        "strict": [
             "error",
             "never"
         ]
