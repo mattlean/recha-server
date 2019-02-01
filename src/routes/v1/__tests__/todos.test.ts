@@ -61,7 +61,7 @@ describe('Todo endpoints', () => {
 
   it("should update a specific todo's info", () =>
     request(app)
-      .put(`${ENDPOINT}/${todo.id}`)
+      .patch(`${ENDPOINT}/${todo.id}`)
       .send(UPDATED_TODO_DATA)
       .then(res => {
         expect(res.statusCode).toBe(200)
@@ -74,7 +74,7 @@ describe('Todo endpoints', () => {
     const completed_at = '2019-01-25T00:53:52.000Z'
 
     return request(app)
-      .put(`${ENDPOINT}/${todo.id}/completed`)
+      .patch(`${ENDPOINT}/${todo.id}/completed`)
       .send({ completed_at })
       .then(res => {
         expect(res.statusCode).toBe(200)
