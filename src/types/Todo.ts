@@ -1,13 +1,12 @@
-export interface TodoData {
-  completed_at?: string
-  name: string
-  text?: string
-}
+export const TYPE = 'Todo'
 
 export default interface Todo {
   id: number
-  completed_at?: string
+  date: string
   name: string
-  text?: string
-  type: 'Todo'
+  details?: string
+  completed_at?: string
+  created_at: string
+  updated_at: string
+  type: typeof TYPE
 }

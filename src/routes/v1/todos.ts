@@ -1,12 +1,11 @@
 import { Router } from 'express'
 
-import { pool } from '../../app'
 import { applyDefaultProps } from '../../util/db'
-import { completeTodo, createTodo, deleteTodo, getTodoById, getTodos, updateTodoInfo } from '../../util/db/todo'
+import { completeTodo, createTodo, deleteTodo, getTodoById, getTodos, updateTodoInfo } from '../../util/db/todos'
+import { pool } from '../../app'
+import { TYPE } from '../../types/Todo'
 
 const router = Router()
-
-const TYPE = 'Todo'
 
 router.get('/', (req, res, next) =>
   getTodos(pool)
@@ -21,15 +20,15 @@ router.get('/:id', (req, res, next) =>
 )
 
 router.post('/', (req, res, next) => {
-  const { name, text } = req.body
-  createTodo(pool, { name, text })
+  const { date, name, details } = req.body
+  createTodo(pool, { date, name, details })
     .then(result => res.status(201).json(applyDefaultProps(result, TYPE)))
     .catch(err => next(err))
 })
 
 router.patch('/:id', (req, res, next) => {
-  const { name, text } = req.body
-  updateTodoInfo(pool, req.params.id, { name, text })
+  const { date, name, details } = req.body
+  updateTodoInfo(pool, req.params.id, { date, name, details })
     .then(result => res.json(applyDefaultProps(result, TYPE)))
     .catch(err => next(err))
 })

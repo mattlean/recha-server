@@ -3,7 +3,7 @@ import { Application } from 'express'
 import { Pool } from 'pg'
 
 import { CONFIG } from '../../types'
-import * as todo from './todo'
+import * as todos from './todos'
 
 export const applyDefaultProps = (data: object[] | object, type: string): object[] | object => {
   const transform = (d: object): object => ({ ...d, type })
@@ -35,4 +35,4 @@ export const createPool = (DB_CONFIG: CONFIG['DB'], app?: Application): Pool => 
   return newPool
 }
 
-export { todo }
+export { todos }
