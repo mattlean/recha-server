@@ -4,8 +4,9 @@ CREATE TABLE todos (
   id SERIAL PRIMARY KEY,
   date DATE NOT NULL,
   name VARCHAR(280) NOT NULL,
-  details VARCHAR(1024),
+  order_num INTEGER,
   completed_at TIMESTAMPTZ,
+  details VARCHAR(1024),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
