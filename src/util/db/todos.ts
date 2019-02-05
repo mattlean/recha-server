@@ -40,12 +40,33 @@ export const getTodoById = (pool: Pool, id: number): Promise<QueryResult['rows']
 export const getTodos = (pool: Pool): Promise<QueryResult['rows']> =>
   pool.query(`SELECT * FROM ${TABLE} ORDER BY id ASC`).then(result => result.rows)
 
-export const updateTodoInfo = (pool: Pool, id: number, data: Partial<Todo>): Promise<QueryResult['rows']> =>
-  pool
-    .query(`UPDATE ${TABLE} SET date=$2, name = $3, details = $4 WHERE id = $1 RETURNING *`, [
-      id,
-      data.date,
-      data.name,
-      data.details
-    ])
-    .then(result => result.rows[0])
+export const patchTodo = (pool: Pool, id: number, data: Partial<Todo>): Promise<QueryResult['rows']> => {
+  const { date, name, details } = data
+
+  if (!date && !name && !details) {
+    throw new Error('No data passed')
+  }
+
+  const nameVals = []
+  const vals = [String(id)]
+  Object.keys(data).forEach(key => {
+    if (key === 'date' || key === 'name' || key === 'details') {
+      if (data[key] || data[key] === null) {
+        nameVals.push({ name: key, val: data[key] })
+        vals.push(data[key])
+      }
+    }
+  })
+
+  let text = `UPDATE ${TABLE} SET`
+  nameVals.forEach((ele, i) => {
+    let str = ` ${ele.name}=$${i + 2}`
+    if (i !== nameVals.length - 1) {
+      str += ','
+    }
+    text += str
+  })
+  text += ' WHERE id = $1 RETURNING *'
+
+  return pool.query(text, vals).then(result => result.rows[0])
+}

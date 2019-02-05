@@ -1,7 +1,7 @@
 import { Router } from 'express'
 
 import { applyDefaultProps } from '../../util/db'
-import { completeTodo, createTodo, deleteTodo, getTodoById, getTodos, updateTodoInfo } from '../../util/db/todos'
+import { completeTodo, createTodo, deleteTodo, getTodoById, getTodos, patchTodo } from '../../util/db/todos'
 import { pool } from '../../app'
 import { TYPE } from '../../types/Todo'
 
@@ -28,12 +28,12 @@ router.post('/', (req, res, next) => {
 
 router.patch('/:id', (req, res, next) => {
   const { date, name, details } = req.body
-  updateTodoInfo(pool, req.params.id, { date, name, details })
+  patchTodo(pool, req.params.id, { date, name, details })
     .then(result => res.json(applyDefaultProps(result, TYPE)))
     .catch(err => next(err))
 })
 
-router.patch('/:id/completed', (req, res, next) => {
+router.patch('/:id/complete', (req, res, next) => {
   const { completed_at } = req.body
   completeTodo(pool, req.params.id, completed_at)
     .then(result => res.json(applyDefaultProps(result, TYPE)))

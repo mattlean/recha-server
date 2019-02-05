@@ -80,7 +80,7 @@ describe('Todo endpoints', () => {
     const completed_at = '2019-01-25T00:53:52.000Z'
 
     return request(app)
-      .patch(`${ENDPOINT}/${todo.id}/completed`)
+      .patch(`${ENDPOINT}/${todo.id}/complete`)
       .send({ completed_at })
       .then(res => {
         expect(res.statusCode).toBe(200)
