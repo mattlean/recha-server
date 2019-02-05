@@ -6,12 +6,6 @@ import { genErr } from '../err'
 
 export const TABLE = 'todos'
 
-export const completeTodo = (pool: Pool, id: number, completed_at: string): Promise<QueryResult['rows']> =>
-  pool.query(`UPDATE ${TABLE} SET completed_at = $2 WHERE id = $1 RETURNING *`, [id, completed_at]).then(result => {
-    if (result.rowCount === 0) throw genErr(404)
-    return result.rows[0]
-  })
-
 export const createTodo = (pool: Pool, data: Partial<Todo>): Promise<QueryResult['rows']> =>
   pool
     .query(`INSERT INTO ${TABLE} (date, name, details) VALUES ($1, $2, $3) RETURNING *`, [
@@ -52,13 +46,6 @@ export const getTodos = (
   text += `ORDER BY ${orderCol} ${orderDir}` // WARN: vulnerable to SQL injection
 
   return pool.query(text).then(result => result.rows)
-}
-
-export const orderTodo = (pool: Pool, id: number, order_num: number): Promise<QueryResult['rows']> => {
-  return pool.query(`UPDATE ${TABLE} SET order_num = $2 WHERE id = $1 RETURNING *`, [id, order_num]).then(result => {
-    if (result.rowCount === 0) throw genErr(404)
-    return result.rows[0]
-  })
 }
 
 export const patchTodo = (pool: Pool, id: number, data: Partial<Todo>): Promise<QueryResult['rows']> => {

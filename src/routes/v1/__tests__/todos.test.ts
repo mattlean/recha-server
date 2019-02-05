@@ -64,7 +64,7 @@ describe('Todo endpoints', () => {
         expect(res.body.type).toBe(TYPE)
       }))
 
-  it("should update a specific todo's info", () =>
+  it("should update a specific todo's date, name & details", () =>
     request(app)
       .patch(`${ENDPOINT}/${todo.id}`)
       .send(UPDATED_TODO_DATA)
@@ -76,11 +76,11 @@ describe('Todo endpoints', () => {
         expect(res.body.type).toBe(TYPE)
       }))
 
-  it("should update a specific todo's completed timestamp", () => {
+  it("should update a specific todo's completed datetime", () => {
     const completed_at = '2019-01-25T00:53:52.000Z'
 
     return request(app)
-      .patch(`${ENDPOINT}/${todo.id}/complete`)
+      .patch(`${ENDPOINT}/${todo.id}`)
       .send({ completed_at })
       .then(res => {
         expect(res.statusCode).toBe(200)
