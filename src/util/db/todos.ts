@@ -43,8 +43,8 @@ export const getTodos = (pool: Pool): Promise<QueryResult['rows']> =>
 export const patchTodo = (pool: Pool, id: number, data: Partial<Todo>): Promise<QueryResult['rows']> => {
   const { date, name, details } = data
 
-  if (!date && !name && !details) {
-    throw new Error('No data passed')
+  if (!date && !name && (!details && details !== null)) {
+    throw new Error('No accepted data passed')
   }
 
   const nameVals = []
