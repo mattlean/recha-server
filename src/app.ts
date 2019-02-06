@@ -4,11 +4,10 @@ import helmet from 'helmet'
 import { json } from 'body-parser'
 import 'source-map-support/register'
 
-import { API, DB } from './config'
+import { API, CLIENT, DB } from './config'
 import { createPool } from './util/db'
 import { genApiData, logger } from './util'
 import routeV1 from './routes/v1'
-// const { CLIENT } = require('./config')
 
 const app = express()
 
@@ -25,18 +24,18 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 // CORS setup
-// if (CLIENT) {
-//   // eslint-disable-next-line no-unused-vars
-//   app.use((req, res, next) => {
-//     res.header('Access-Control-Allow-Origin', CLIENT)
-//     res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept')
-//     if (req.method === 'OPTIONS') {
-//       res.header('Access-Control-Allow-Methods', 'POST,PUT')
-//       return res.status(200).json({})
-//     }
-//     return next()
-//   })
-// }
+if (CLIENT) {
+  // eslint-disable-next-line no-unused-vars
+  app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', CLIENT)
+    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept')
+    if (req.method === 'OPTIONS') {
+      res.header('Access-Control-Allow-Methods', 'POST,PUT')
+      return res.status(200).json({})
+    }
+    return next()
+  })
+}
 
 app.get('/', (req, res) => res.json(genApiData()))
 

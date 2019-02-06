@@ -1,4 +1,7 @@
 export default interface CONFIG {
+  APP: {
+    PORT: number
+  }
   DB: {
     HOST: string
     NAME: string
@@ -6,5 +9,4 @@ export default interface CONFIG {
     PASS: string
     PORT: number
   }
-  PORT: number
 }

@@ -8,7 +8,7 @@ let configDB: CONFIG['DB'] = {
   PORT: 5432
 }
 
-let configPort: CONFIG['PORT'] = 3000
+let configPort: CONFIG['APP']['PORT'] = 3000
 
 if (process.env.NODE_ENV) {
   const { DB, PORT } = require(`./${process.env.NODE_ENV}`) // eslint-disable-line global-require, import/no-dynamic-require, @typescript-eslint/no-var-requires
@@ -30,6 +30,8 @@ export const API = {
     }
   }
 }
+
+export const CLIENT = undefined
 
 export const DB = configDB
 

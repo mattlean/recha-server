@@ -17,4 +17,4 @@ export const DB: CONFIG['DB'] = {
   PORT: Number(process.env.DB_PORT)
 }
 
-export const PORT: CONFIG['PORT'] = Number(process.env.PORT)
+export const PORT: CONFIG['APP']['PORT'] = Number(process.env.PORT)
