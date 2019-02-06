@@ -4,6 +4,7 @@ import app, { db } from '../../../app'
 import Todo, { TYPE } from '../../../types/Todo'
 import { API } from '../../../config'
 import { clearDBTable } from '../../../util/test'
+import { ERR_TYPE } from '../../../types'
 import { TABLE } from '../../../util/db/todos'
 
 const ENDPOINT = `${API.VERS.V1.PATH}${TABLE}`
@@ -32,8 +33,9 @@ describe('Todo endpoints', () => {
       .get(ENDPOINT)
       .then(res => {
         expect(res.statusCode).toBe(200)
-        expect(res.body).toBeInstanceOf(Array)
-        expect(res.body.length).toBe(0)
+        expect(res.body.type).toBe(TYPE)
+        expect(res.body.data).toBeInstanceOf(Array)
+        expect(res.body.data.length).toBe(0)
       }))
 
   it('should create a todo', () =>
@@ -43,10 +45,10 @@ describe('Todo endpoints', () => {
       .then(res => {
         expect(res.statusCode).toBe(201)
         expect(res.body.type).toBe(TYPE)
-        expect(res.body.date).toBe(NEW_TODO_DATA.date)
-        expect(res.body.name).toBe(NEW_TODO_DATA.name)
-        expect(res.body.details).toBe(NEW_TODO_DATA.details)
-        todo = res.body
+        expect(res.body.data.date).toBe(NEW_TODO_DATA.date)
+        expect(res.body.data.name).toBe(NEW_TODO_DATA.name)
+        expect(res.body.data.details).toBe(NEW_TODO_DATA.details)
+        todo = res.body.data
       }))
 
   it('should list all todos', () =>
@@ -54,12 +56,12 @@ describe('Todo endpoints', () => {
       .get(ENDPOINT)
       .then(res => {
         expect(res.statusCode).toBe(200)
-        expect(res.body).toBeInstanceOf(Array)
-        expect(res.body.length).toBe(1)
-        expect(res.body[0].type).toBe(TYPE)
-        expect(res.body[0].date).toBe(todo.date)
-        expect(res.body[0].name).toBe(todo.name)
-        expect(res.body[0].details).toBe(todo.details)
+        expect(res.body.type).toBe(TYPE)
+        expect(res.body.data).toBeInstanceOf(Array)
+        expect(res.body.data.length).toBe(1)
+        expect(res.body.data[0].date).toBe(todo.date)
+        expect(res.body.data[0].name).toBe(todo.name)
+        expect(res.body.data[0].details).toBe(todo.details)
       }))
 
   it('should read a specific todo', () =>
@@ -68,9 +70,9 @@ describe('Todo endpoints', () => {
       .then(res => {
         expect(res.statusCode).toBe(200)
         expect(res.body.type).toBe(TYPE)
-        expect(res.body.date).toBe(NEW_TODO_DATA.date)
-        expect(res.body.name).toBe(NEW_TODO_DATA.name)
-        expect(res.body.details).toBe(NEW_TODO_DATA.details)
+        expect(res.body.data.date).toBe(NEW_TODO_DATA.date)
+        expect(res.body.data.name).toBe(NEW_TODO_DATA.name)
+        expect(res.body.data.details).toBe(NEW_TODO_DATA.details)
       }))
 
   // eslint-disable-next-line quotes
@@ -81,9 +83,9 @@ describe('Todo endpoints', () => {
       .then(res => {
         expect(res.statusCode).toBe(200)
         expect(res.body.type).toBe(TYPE)
-        expect(res.body.date).toBe(UPDATED_TODO_DATA.date)
-        expect(res.body.name).toBe(UPDATED_TODO_DATA.name)
-        expect(res.body.details).toBe(UPDATED_TODO_DATA.details)
+        expect(res.body.data.date).toBe(UPDATED_TODO_DATA.date)
+        expect(res.body.data.name).toBe(UPDATED_TODO_DATA.name)
+        expect(res.body.data.details).toBe(UPDATED_TODO_DATA.details)
       }))
 
   // eslint-disable-next-line quotes
@@ -96,10 +98,10 @@ describe('Todo endpoints', () => {
       .then(res => {
         expect(res.statusCode).toBe(200)
         expect(res.body.type).toBe(TYPE)
-        expect(res.body.date).toBe(UPDATED_TODO_DATA.date)
-        expect(res.body.name).toBe(UPDATED_TODO_DATA.name)
-        expect(res.body.details).toBe(UPDATED_TODO_DATA.details)
-        expect(res.body.completed_at).toBe(completed_at)
+        expect(res.body.data.date).toBe(UPDATED_TODO_DATA.date)
+        expect(res.body.data.name).toBe(UPDATED_TODO_DATA.name)
+        expect(res.body.data.details).toBe(UPDATED_TODO_DATA.details)
+        expect(res.body.data.completed_at).toBe(completed_at)
       })
   })
 
@@ -109,14 +111,16 @@ describe('Todo endpoints', () => {
       .then(res => {
         expect(res.statusCode).toBe(200)
         expect(res.body.type).toBe(TYPE)
-        expect(res.body.date).toBe(UPDATED_TODO_DATA.date)
-        expect(res.body.name).toBe(UPDATED_TODO_DATA.name)
-        expect(res.body.details).toBe(UPDATED_TODO_DATA.details)
-
-        return request(app)
+        expect(res.body.data.date).toBe(UPDATED_TODO_DATA.date)
+        expect(res.body.data.name).toBe(UPDATED_TODO_DATA.name)
+        expect(res.body.data.details).toBe(UPDATED_TODO_DATA.details)
+      })
+      .then(() =>
+        request(app)
           .get(`${ENDPOINT}/${todo.id}`)
           .then(res2 => {
             expect(res2.statusCode).toBe(404)
+            expect(res2.body.type).toBe(ERR_TYPE)
           })
-      }))
+      ))
 })

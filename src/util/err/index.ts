@@ -1,14 +1,12 @@
 /* eslint import/prefer-default-export: 0 */
 import ServerErr from './ServerErr'
 import { formatAPIRes } from '../index'
-import { APIRes } from '../../types'
+import { APIRes, ERR_TYPE } from '../../types'
 
-interface ErrRes {
+interface ErrData {
   status: number
   message: string
 }
-
-export const TYPE = 'Error'
 
 export const genErr = (status?: number, message?: string): ServerErr => {
   let m = message
@@ -28,11 +26,11 @@ export const genErr = (status?: number, message?: string): ServerErr => {
   return new ServerErr(m, status)
 }
 
-export const genErrRes = (err: ServerErr): APIRes<ErrRes> =>
-  formatAPIRes<ErrRes>(
+export const genErrRes = (err: ServerErr): APIRes<ErrData> =>
+  formatAPIRes<ErrData>(
     {
       status: err.status || 500,
       message: err.message || 'Something broke!'
     },
-    TYPE
+    ERR_TYPE
   )

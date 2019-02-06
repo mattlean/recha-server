@@ -16,7 +16,7 @@ export const formatAPIRes = <T>(data: T | T[], type: Types): APIRes<T> => ({
   type
 })
 
-const genApiData = (ver?: number): ApiData => {
+export const genApiData = (ver?: number): ApiData => {
   const data: ApiData = {
     API: API.NAME,
     ENV: process.env.NODE_ENV
@@ -29,4 +29,4 @@ const genApiData = (ver?: number): ApiData => {
   return data
 }
 
-export { db, err, genApiData, logger }
+export { db, err, logger }
