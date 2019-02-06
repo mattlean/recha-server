@@ -4,15 +4,6 @@ import { Application } from 'express'
 import { CONFIG } from '../../types'
 import * as todos from './todos'
 
-export const applyDefaultProps = (data: object[] | object, type: string): object[] | object => {
-  const transform = (d: object): object => ({ ...d, type })
-
-  if (Array.isArray(data)) {
-    return data.map(ele => transform(ele))
-  }
-  return transform(data)
-}
-
 // Create pg-promise Database object
 // If Express app is passed, assign pool to app's local variables
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
