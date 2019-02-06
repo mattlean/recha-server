@@ -5,7 +5,7 @@ import { json } from 'body-parser'
 import 'source-map-support/register'
 
 import { API, CLIENT, DB } from './config'
-import { createPool } from './util/db'
+import { createDB } from './util/db'
 import { genApiData, logger } from './util'
 import routeV1 from './routes/v1'
 
@@ -63,7 +63,7 @@ app.use((err, req, res, next) => {
 
 export default app
 
-export const pool = (() => {
+export const db = (() => {
   logger.info(`Database: ${DB.HOST}:${DB.PORT}/${DB.NAME}`)
-  return createPool(DB, app)
+  return createDB(DB, app)
 })()

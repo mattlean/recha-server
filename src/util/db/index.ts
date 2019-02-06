@@ -1,6 +1,5 @@
-/* eslint import/prefer-default-export: 0 */
+import pgPromise, { IMain, IDatabase } from 'pg-promise'
 import { Application } from 'express'
-import { Pool } from 'pg'
 
 import { CONFIG } from '../../types'
 import * as todos from './todos'
@@ -14,25 +13,22 @@ export const applyDefaultProps = (data: object[] | object, type: string): object
   return transform(data)
 }
 
-// Create node-postgres connection pool
+// Create pg-promise Database object
 // If Express app is passed, assign pool to app's local variables
-export const createPool = (DB_CONFIG: CONFIG['DB'], app?: Application): Pool => {
-  const POOL_CONFIG = {
-    database: DB_CONFIG.NAME,
-    host: DB_CONFIG.HOST,
-    user: DB_CONFIG.USER,
-    password: DB_CONFIG.PASS,
-    port: DB_CONFIG.PORT
-  }
-
-  const newPool = new Pool(POOL_CONFIG)
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const createDB = (DB_CONFIG: CONFIG['DB'], app?: Application): IDatabase<any> => {
+  const pgp: IMain = pgPromise()
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const db: IDatabase<any> = pgp(
+    `postgres://${DB_CONFIG.USER}:${DB_CONFIG.PASS}@${DB_CONFIG.HOST}:${DB_CONFIG.PORT}/${DB_CONFIG.NAME}`
+  )
 
   if (app) {
     const a = app
-    a.locals.pool = newPool
+    a.locals.db = db
   }
 
-  return newPool
+  return db
 }
 
 export { todos }

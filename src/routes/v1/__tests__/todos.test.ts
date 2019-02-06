@@ -1,17 +1,16 @@
 import request from 'supertest'
 
-import app, { pool } from '../../../app'
+import app, { db } from '../../../app'
 import Todo, { TYPE } from '../../../types/Todo'
 import { API } from '../../../config'
 import { clearDBTable } from '../../../util/test'
 import { TABLE } from '../../../util/db/todos'
 
 const ENDPOINT = `${API.VERS.V1.PATH}${TABLE}`
-const p = pool
 
-beforeAll(() => clearDBTable(p, TABLE))
+beforeAll(() => clearDBTable(db, TABLE))
 
-afterAll(() => clearDBTable(p, TABLE))
+afterAll(() => clearDBTable(db, TABLE))
 
 describe('Todo endpoints', () => {
   const NEW_TODO_DATA: Partial<Todo> = {
@@ -64,6 +63,7 @@ describe('Todo endpoints', () => {
         expect(res.body.type).toBe(TYPE)
       }))
 
+  // eslint-disable-next-line quotes
   it("should update a specific todo's date, name & details", () =>
     request(app)
       .patch(`${ENDPOINT}/${todo.id}`)
@@ -76,6 +76,7 @@ describe('Todo endpoints', () => {
         expect(res.body.type).toBe(TYPE)
       }))
 
+  // eslint-disable-next-line quotes
   it("should update a specific todo's completed datetime", () => {
     const completed_at = '2019-01-25T00:53:52.000Z'
 

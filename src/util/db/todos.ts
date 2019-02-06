@@ -1,38 +1,36 @@
 import moment from 'moment'
-import { Pool, QueryResult } from 'pg'
+import { IDatabase } from 'pg-promise'
 
 import Todo from '../../types/Todo'
 import { genErr } from '../err'
 
 export const TABLE = 'todos'
 
-export const createTodo = (pool: Pool, data: Partial<Todo>): Promise<QueryResult['rows']> =>
-  pool
-    .query(`INSERT INTO ${TABLE} (date, name, details) VALUES ($1, $2, $3) RETURNING *`, [
-      data.date,
-      data.name,
-      data.details
-    ])
-    .then(result => result.rows[0])
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const createTodo = (db: IDatabase<any>, data: Partial<Todo>): Promise<Todo> =>
+  db.oneOrNone(`INSERT INTO ${TABLE} (date, name, details) VALUES ($1, $2, $3) RETURNING *`, [
+    data.date,
+    data.name,
+    data.details
+  ])
 
-export const deleteTodo = (pool: Pool, id: number): Promise<QueryResult> =>
-  pool.query(`DELETE FROM ${TABLE} WHERE id = $1 RETURNING *`, [id]).then(result => {
-    if (result.rowCount === 0) throw genErr(404)
-    return result.rows[0]
-  })
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const deleteTodo = (db: IDatabase<any>, id: number): Promise<Todo> =>
+  db.oneOrNone(`DELETE FROM ${TABLE} WHERE id = $1 RETURNING *`, [id])
 
-export const getTodoById = (pool: Pool, id: number): Promise<QueryResult['rows']> =>
-  pool.query(`SELECT * FROM ${TABLE} WHERE id = $1`, [id]).then(result => {
-    if (result.rowCount === 0) throw genErr(404)
-    return result.rows[0]
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const getTodoById = (db: IDatabase<any>, id: number): Promise<Todo> =>
+  db.oneOrNone(`SELECT * FROM ${TABLE} WHERE id = $1`, [id]).then(result => {
+    if (!result) throw genErr(404)
+    return result
   })
 
 export const getTodos = (
-  pool: Pool,
+  db: IDatabase<any>, // eslint-disable-line @typescript-eslint/no-explicit-any
   date?: string,
   orderCol: 'id' | 'order_num' = 'id',
   orderDir: 'ASC' | 'DESC' = 'DESC'
-): Promise<QueryResult['rows']> => {
+): Promise<Todo[]> => {
   let text = `SELECT * FROM ${TABLE} `
 
   let whereText
@@ -43,12 +41,13 @@ export const getTodos = (
   }
   if (whereText) text += whereText
 
-  text += `ORDER BY ${orderCol} ${orderDir}` // WARN: vulnerable to SQL injection
+  text += 'ORDER BY $1:raw $2:raw'
 
-  return pool.query(text).then(result => result.rows)
+  return db.any(text, [orderCol, orderDir])
 }
 
-export const patchTodo = (pool: Pool, id: number, data: Partial<Todo>): Promise<QueryResult['rows']> => {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const patchTodo = (db: IDatabase<any>, id: number, data: Partial<Todo>): Promise<Todo> => {
   const { completed_at, date, order_num, name, details } = data
 
   if (
@@ -82,8 +81,8 @@ export const patchTodo = (pool: Pool, id: number, data: Partial<Todo>): Promise<
   })
   text += ' WHERE id = $1 RETURNING *'
 
-  return pool.query(text, vals).then(result => {
-    if (result.rowCount === 0) throw genErr(404)
-    return result.rows[0]
+  return db.oneOrNone(text, vals).then(result => {
+    if (!result) throw genErr(404)
+    return result
   })
 }

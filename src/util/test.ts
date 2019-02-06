@@ -1,9 +1,10 @@
 /* eslint import/prefer-default-export: 0 */
-import { Pool, QueryResult } from 'pg'
+import { IDatabase } from 'pg-promise'
 
-export const clearDBTable = (pool: Pool, table: string): Promise<QueryResult['rows']> => {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const clearDBTable = (db: IDatabase<any>, table: string): Promise<any[]> => {
   if (process.env.NODE_ENV === 'test') {
-    return pool.query(`DELETE FROM ${table} RETURNING *`).then(result => result.rows)
+    return db.any(`DELETE FROM ${table} RETURNING *`)
   }
 
   throw new Error('Invalid environment')
