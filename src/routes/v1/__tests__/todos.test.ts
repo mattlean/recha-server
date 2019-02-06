@@ -27,16 +27,25 @@ describe('Todo endpoints', () => {
 
   let todo
 
+  it('should list no todos when no todos are in the DB', () =>
+    request(app)
+      .get(ENDPOINT)
+      .then(res => {
+        expect(res.statusCode).toBe(200)
+        expect(res.body).toBeInstanceOf(Array)
+        expect(res.body.length).toBe(0)
+      }))
+
   it('should create a todo', () =>
     request(app)
       .post(ENDPOINT)
       .send(NEW_TODO_DATA)
       .then(res => {
         expect(res.statusCode).toBe(201)
+        expect(res.body.type).toBe(TYPE)
         expect(res.body.date).toBe(NEW_TODO_DATA.date)
         expect(res.body.name).toBe(NEW_TODO_DATA.name)
         expect(res.body.details).toBe(NEW_TODO_DATA.details)
-        expect(res.body.type).toBe(TYPE)
         todo = res.body
       }))
 
@@ -46,10 +55,11 @@ describe('Todo endpoints', () => {
       .then(res => {
         expect(res.statusCode).toBe(200)
         expect(res.body).toBeInstanceOf(Array)
+        expect(res.body.length).toBe(1)
+        expect(res.body[0].type).toBe(TYPE)
         expect(res.body[0].date).toBe(todo.date)
         expect(res.body[0].name).toBe(todo.name)
         expect(res.body[0].details).toBe(todo.details)
-        expect(res.body[0].type).toBe(TYPE)
       }))
 
   it('should read a specific todo', () =>
@@ -57,10 +67,10 @@ describe('Todo endpoints', () => {
       .get(`${ENDPOINT}/${todo.id}`)
       .then(res => {
         expect(res.statusCode).toBe(200)
+        expect(res.body.type).toBe(TYPE)
         expect(res.body.date).toBe(NEW_TODO_DATA.date)
         expect(res.body.name).toBe(NEW_TODO_DATA.name)
         expect(res.body.details).toBe(NEW_TODO_DATA.details)
-        expect(res.body.type).toBe(TYPE)
       }))
 
   // eslint-disable-next-line quotes
@@ -70,10 +80,10 @@ describe('Todo endpoints', () => {
       .send(UPDATED_TODO_DATA)
       .then(res => {
         expect(res.statusCode).toBe(200)
+        expect(res.body.type).toBe(TYPE)
         expect(res.body.date).toBe(UPDATED_TODO_DATA.date)
         expect(res.body.name).toBe(UPDATED_TODO_DATA.name)
         expect(res.body.details).toBe(UPDATED_TODO_DATA.details)
-        expect(res.body.type).toBe(TYPE)
       }))
 
   // eslint-disable-next-line quotes
@@ -85,11 +95,11 @@ describe('Todo endpoints', () => {
       .send({ completed_at })
       .then(res => {
         expect(res.statusCode).toBe(200)
+        expect(res.body.type).toBe(TYPE)
         expect(res.body.date).toBe(UPDATED_TODO_DATA.date)
         expect(res.body.name).toBe(UPDATED_TODO_DATA.name)
         expect(res.body.details).toBe(UPDATED_TODO_DATA.details)
         expect(res.body.completed_at).toBe(completed_at)
-        expect(res.body.type).toBe(TYPE)
       })
   })
 
@@ -98,10 +108,10 @@ describe('Todo endpoints', () => {
       .del(`${ENDPOINT}/${todo.id}`)
       .then(res => {
         expect(res.statusCode).toBe(200)
+        expect(res.body.type).toBe(TYPE)
         expect(res.body.date).toBe(UPDATED_TODO_DATA.date)
         expect(res.body.name).toBe(UPDATED_TODO_DATA.name)
         expect(res.body.details).toBe(UPDATED_TODO_DATA.details)
-        expect(res.body.type).toBe(TYPE)
 
         return request(app)
           .get(`${ENDPOINT}/${todo.id}`)

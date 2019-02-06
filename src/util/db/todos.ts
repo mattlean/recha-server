@@ -16,7 +16,10 @@ export const createTodo = (db: IDatabase<any>, data: Partial<Todo>): Promise<Tod
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const deleteTodo = (db: IDatabase<any>, id: number): Promise<Todo> =>
-  db.oneOrNone(`DELETE FROM ${TABLE} WHERE id = $1 RETURNING *`, [id])
+  db.oneOrNone(`DELETE FROM ${TABLE} WHERE id = $1 RETURNING *`, [id]).then(result => {
+    if (!result) throw genErr(404)
+    return result
+  })
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const getTodoById = (db: IDatabase<any>, id: number): Promise<Todo> =>

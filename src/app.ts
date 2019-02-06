@@ -7,6 +7,7 @@ import 'source-map-support/register'
 import { API, CLIENT, DB } from './config'
 import { createDB } from './util/db'
 import { genApiData, logger } from './util'
+import { genErr, genErrRes } from './util/err'
 import routeV1 from './routes/v1'
 
 const app = express()
@@ -42,23 +43,13 @@ app.get('/', (req, res) => res.json(genApiData()))
 app.use(`${API.VERS.V1.PATH}`, routeV1)
 
 // 404
-app.use((req, res, next) => res.status(404).send('Not found')) // eslint-disable-line no-unused-vars
+app.use((req, res, next) => next(genErr(404))) // eslint-disable-line no-unused-vars
 
 // error handler
 // eslint-disable-next-line no-unused-vars
 app.use((err, req, res, next) => {
   logger.error(err.stack)
-
-  const status = err.status || 500
-
-  let message
-  if (status === 500) {
-    message = 'Something broke! :('
-  } else {
-    ;({ message } = err)
-  }
-
-  res.status(status).send(message)
+  res.status(err.status || 500).json(genErrRes(err))
 })
 
 export default app
