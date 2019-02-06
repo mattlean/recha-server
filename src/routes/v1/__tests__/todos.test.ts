@@ -51,6 +51,18 @@ describe('Todo endpoints', () => {
         todo = res.body.data
       }))
 
+  it('should fail to create a todo when name is null', () =>
+    request(app)
+      .post(ENDPOINT)
+      .send({
+        ...NEW_TODO_DATA,
+        name: null
+      })
+      .then(res => {
+        expect(res.statusCode).toBe(500)
+        expect(res.body.type).toBe(ERR_TYPE)
+      }))
+
   it('should list all todos', () =>
     request(app)
       .get(ENDPOINT)
@@ -105,6 +117,16 @@ describe('Todo endpoints', () => {
       })
   })
 
+  // eslint-disable-next-line quotes
+  it("should fail to update a specific todo's name to null", () =>
+    request(app)
+      .patch(`${ENDPOINT}/${todo.id}`)
+      .send({ name: null })
+      .then(res => {
+        expect(res.statusCode).toBe(500)
+        expect(res.body.type).toBe(ERR_TYPE)
+      }))
+
   it('should delete a specific todo', () =>
     request(app)
       .del(`${ENDPOINT}/${todo.id}`)
@@ -114,13 +136,33 @@ describe('Todo endpoints', () => {
         expect(res.body.data.date).toBe(UPDATED_TODO_DATA.date)
         expect(res.body.data.name).toBe(UPDATED_TODO_DATA.name)
         expect(res.body.data.details).toBe(UPDATED_TODO_DATA.details)
-      })
-      .then(() =>
-        request(app)
-          .get(`${ENDPOINT}/${todo.id}`)
-          .then(res2 => {
-            expect(res2.statusCode).toBe(404)
-            expect(res2.body.type).toBe(ERR_TYPE)
-          })
-      ))
+      }))
+
+  // eslint-disable-next-line quotes
+  it("should fail to read a specific todo that doesn't exist", () =>
+    request(app)
+      .get(`${ENDPOINT}/${todo.id}`)
+      .then(res => {
+        expect(res.statusCode).toBe(404)
+        expect(res.body.type).toBe(ERR_TYPE)
+      }))
+
+  // eslint-disable-next-line quotes
+  it("should fail to update a specific todo that doesn't exist", () =>
+    request(app)
+      .patch(`${ENDPOINT}/${todo.id}`)
+      .send(UPDATED_TODO_DATA)
+      .then(res => {
+        expect(res.statusCode).toBe(404)
+        expect(res.body.type).toBe(ERR_TYPE)
+      }))
+
+  // eslint-disable-next-line quotes
+  it("should fail to delete a specific todo that doesn't exist", () =>
+    request(app)
+      .del(`${ENDPOINT}/${todo.id}`)
+      .then(res => {
+        expect(res.statusCode).toBe(404)
+        expect(res.body.type).toBe(ERR_TYPE)
+      }))
 })

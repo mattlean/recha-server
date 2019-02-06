@@ -46,15 +46,18 @@ app.use(`${API.VERS.V1.PATH}`, routeV1)
 app.use((req, res, next) => next(genErr(404))) // eslint-disable-line no-unused-vars
 
 // error handler
-// eslint-disable-next-line no-unused-vars
 app.use((err, req, res, next) => {
-  logger.error(err.stack)
+  if (process.env.NODE_ENV !== 'test') {
+    logger.error(err.stack)
+  }
   res.status(err.status || 500).json(genErrRes(err))
 })
 
 export default app
 
 export const db = (() => {
-  logger.info(`Database: ${DB.HOST}:${DB.PORT}/${DB.NAME}`)
+  if (process.env.NODE_ENV !== 'test') {
+    logger.info(`Database: ${DB.HOST}:${DB.PORT}/${DB.NAME}`)
+  }
   return createDB(DB, app)
 })()
