@@ -50,7 +50,9 @@ app.use((err, req, res, next) => {
   if (process.env.NODE_ENV !== 'test') {
     logger.error(err.stack)
   }
-  res.status(err.status || 500).json(genErrRes(err))
+
+  const errRes = genErrRes(err)
+  res.status(errRes.data.status).json(errRes)
 })
 
 export default app

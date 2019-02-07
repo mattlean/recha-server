@@ -11,7 +11,7 @@ interface ApiData {
   VER?: number
 }
 
-export const formatAPIRes = <T>(data: T | T[], type: Types): APIRes<T> => ({
+export const formatAPIRes = <T>(data: T, type: Types): APIRes<T> => ({
   data,
   type
 })

@@ -8,7 +8,7 @@ export const TABLE = 'todos'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const createTodo = (db: IDatabase<any>, data: Partial<Todo>): Promise<Todo> =>
-  db.oneOrNone(`INSERT INTO ${TABLE} (date, name, details) VALUES ($1, $2, $3) RETURNING *`, [
+  db.one(`INSERT INTO ${TABLE} (date, name, details) VALUES ($1, $2, $3) RETURNING *`, [
     data.date,
     data.name,
     data.details
@@ -16,17 +16,14 @@ export const createTodo = (db: IDatabase<any>, data: Partial<Todo>): Promise<Tod
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const deleteTodo = (db: IDatabase<any>, id: number): Promise<Todo> =>
-  db.oneOrNone(`DELETE FROM ${TABLE} WHERE id = $1 RETURNING *`, [id]).then(result => {
+  db.one(`DELETE FROM ${TABLE} WHERE id = $1 RETURNING *`, [id]).then(result => {
     if (!result) throw genErr(404)
     return result
   })
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const getTodoById = (db: IDatabase<any>, id: number): Promise<Todo> =>
-  db.oneOrNone(`SELECT * FROM ${TABLE} WHERE id = $1`, [id]).then(result => {
-    if (!result) throw genErr(404)
-    return result
-  })
+  db.one(`SELECT * FROM ${TABLE} WHERE id = $1`, [id])
 
 export const getTodos = (
   db: IDatabase<any>, // eslint-disable-line @typescript-eslint/no-explicit-any
@@ -38,9 +35,7 @@ export const getTodos = (
 
   let whereText
   if (date) {
-    const momentDate = moment(date)
-    if (!momentDate.isValid()) throw new Error('Invalid date')
-    whereText = `WHERE date = '${momentDate.format('YYYY-MM-DD')}' `
+    whereText = `WHERE date = '${moment(date).format('YYYY-MM-DD')}' `
   }
   if (whereText) text += whereText
 
@@ -51,18 +46,6 @@ export const getTodos = (
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const patchTodo = (db: IDatabase<any>, id: number, data: Partial<Todo>): Promise<Todo> => {
-  const { completed_at, date, order_num, name, details } = data
-
-  if (
-    !date &&
-    !name &&
-    (!completed_at && completed_at !== null) &&
-    (!details && details !== null) &&
-    (!order_num && order_num !== null)
-  ) {
-    throw new Error('No accepted data passed')
-  }
-
   const nameVals = []
   const vals: (number | string)[] = [id]
   Object.keys(data).forEach(key => {
@@ -84,8 +67,5 @@ export const patchTodo = (db: IDatabase<any>, id: number, data: Partial<Todo>): 
   })
   text += ' WHERE id = $1 RETURNING *'
 
-  return db.oneOrNone(text, vals).then(result => {
-    if (!result) throw genErr(404)
-    return result
-  })
+  return db.one(text, vals)
 }

@@ -3,8 +3,8 @@ import CONFIG from './CONFIG'
 import * as Todo from './Todo'
 
 export interface APIRes<T> {
-  data: T | T[]
-  type: string
+  data: T
+  type: Types
 }
 
 export const ERR_TYPE = 'Error'

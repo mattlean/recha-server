@@ -4,8 +4,9 @@ import { formatAPIRes } from '../index'
 import { APIRes, ERR_TYPE } from '../../types'
 
 interface ErrData {
-  status: number
-  message: string
+  code?: number
+  message?: string
+  status?: number
 }
 
 export const genErr = (status?: number, message?: string): ServerErr => {
@@ -26,11 +27,23 @@ export const genErr = (status?: number, message?: string): ServerErr => {
   return new ServerErr(m, status)
 }
 
-export const genErrRes = (err: ServerErr): APIRes<ErrData> =>
-  formatAPIRes<ErrData>(
+export const genErrRes = (err: ServerErr): APIRes<ErrData> => {
+  let { status } = err
+  const code = Number(err.code)
+
+  if (typeof code === 'number' && !status) {
+    if (code === 0) {
+      status = 404
+    } else if (code === 22007 || code === 23502) {
+      status = 400
+    }
+  }
+
+  return formatAPIRes<ErrData>(
     {
-      status: err.status || 500,
+      status: status || 500,
       message: err.message || 'Something broke!'
     },
     ERR_TYPE
   )
+}

@@ -1,4 +1,6 @@
 class ServerErr extends Error {
+  public code: string
+
   public message: string
 
   public status: number

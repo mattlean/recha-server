@@ -59,7 +59,7 @@ describe('Todo endpoints', () => {
         name: null
       })
       .then(res => {
-        expect(res.statusCode).toBe(500)
+        expect(res.statusCode).toBe(400)
         expect(res.body.type).toBe(ERR_TYPE)
       }))
 
@@ -123,9 +123,11 @@ describe('Todo endpoints', () => {
       .patch(`${ENDPOINT}/${todo.id}`)
       .send({ name: null })
       .then(res => {
-        expect(res.statusCode).toBe(500)
+        expect(res.statusCode).toBe(400)
         expect(res.body.type).toBe(ERR_TYPE)
       }))
+
+  // TODO: Test GET list query params
 
   it('should delete a specific todo', () =>
     request(app)
