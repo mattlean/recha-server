@@ -29,12 +29,12 @@ export const genErr = (status?: number, message?: string): ServerErr => {
 
 export const genErrRes = (err: ServerErr): APIRes<ErrData> => {
   let { status } = err
-  const code = Number(err.code)
+  const code = String(err.code)
 
-  if (typeof code === 'number' && !status) {
-    if (code === 0) {
+  if (code && !status) {
+    if (code === '0') {
       status = 404
-    } else if (code === 22007 || code === 23502) {
+    } else if (code === '22007' || code === '22P02' || code === '23502') {
       status = 400
     }
   }

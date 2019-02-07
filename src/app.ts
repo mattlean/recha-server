@@ -16,7 +16,7 @@ app.use(helmet())
 app.use(compression())
 app.use(json())
 
-// logging middleware
+// Logging middleware
 if (process.env.NODE_ENV === 'development') {
   app.use((req, res, next) => {
     logger.debug(`${req.method} ${req.path}`)
@@ -45,7 +45,7 @@ app.use(`${API.VERS.V1.PATH}`, routeV1)
 // 404
 app.use((req, res, next) => next(genErr(404))) // eslint-disable-line no-unused-vars
 
-// error handler
+// Error handler
 app.use((err, req, res, next) => {
   if (process.env.NODE_ENV !== 'test') {
     logger.error(err.stack)
