@@ -18,7 +18,8 @@ describe('Todo endpoints', () => {
     date: '2019-02-03T08:00:00.000Z',
     name: 'Hello world!',
     details:
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus eget odio eu nisi congue semper. Cras a ultrices sapien. Suspendisse non metus eu ex tempor facilisis. Pellentesque faucibus nunc vitae eleifend elementum. Nam tincidunt, ipsum quis vulputate blandit, odio velit sagittis ligula, in elementum elit risus a lacus. Vivamus eu tincidunt sapien, sit amet blandit sapien. Donec sollicitudin pellentesque augue, nec egestas elit volutpat ac. Nullam in arcu ac nulla tincidunt luctus et sed erat. Sed quis dapibus ante, quis consequat mauris. Vestibulum quis purus ac velit congue viverra et id dui. Nam a magna imperdiet, lobortis nunc nec, aliquet quam. Nam dapibus velit ac erat rhoncus cursus. Suspendisse tempus est massa, vitae lacinia dolor pellentesque sit amet. Nunc mattis eros quam, quis ornare lectus bibendum a. Donec porttitor, neque quis dapibus lacinia, turpis sapien tempor eros, eget semper nisl magna ut libero.'
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus eget odio eu nisi congue semper. Cras a ultrices sapien. Suspendisse non metus eu ex tempor facilisis. Pellentesque faucibus nunc vitae eleifend elementum. Nam tincidunt, ipsum quis vulputate blandit, odio velit sagittis ligula, in elementum elit risus a lacus. Vivamus eu tincidunt sapien, sit amet blandit sapien. Donec sollicitudin pellentesque augue, nec egestas elit volutpat ac. Nullam in arcu ac nulla tincidunt luctus et sed erat. Sed quis dapibus ante, quis consequat mauris. Vestibulum quis purus ac velit congue viverra et id dui. Nam a magna imperdiet, lobortis nunc nec, aliquet quam. Nam dapibus velit ac erat rhoncus cursus. Suspendisse tempus est massa, vitae lacinia dolor pellentesque sit amet. Nunc mattis eros quam, quis ornare lectus bibendum a. Donec porttitor, neque quis dapibus lacinia, turpis sapien tempor eros, eget semper nisl magna ut libero.',
+    order_num: 1
   }
   const UPDATED_TODO_DATA: Partial<Todo> = {
     date: '1990-01-01T08:00:00.000Z',
@@ -194,10 +195,7 @@ describe('Todo endpoints', () => {
     // eslint-disable-next-line jest/valid-expect-in-promise
     const thirdTodo = request(app)
       .post(ENDPOINT)
-      .send({
-        date: '2019-02-02T08:00:00.000Z',
-        name: 'Middle Todo'
-      })
+      .send(NEW_TODO_DATA)
       .then(res => {
         expect(res.statusCode).toBe(201)
         return res
@@ -214,6 +212,7 @@ describe('Todo endpoints', () => {
           expect(res.statusCode).toBe(200)
           expect(res.body.type).toBe(TYPE)
           expect(res.body.data).toBeInstanceOf(Array)
+          expect(res.body.data.length).toBe(3)
           expect(res.body.data[0].date).toBe(todos[0].body.data.date)
           expect(res.body.data[1].date).toBe(todos[2].body.data.date)
           expect(res.body.data[2].date).toBe(todos[1].body.data.date)
@@ -221,5 +220,36 @@ describe('Todo endpoints', () => {
     )
   })
 
-  // TODO: Test date filter for GET todos query
+  it('should list all todos for specific date by order number descending', () => {
+    const anotherTodo = {
+      date: NEW_TODO_DATA.date,
+      name: 'Yet another todo...',
+      order_num: 2
+    }
+
+    return request(app)
+      .post(ENDPOINT)
+      .send(anotherTodo)
+      .then(res => {
+        expect(res.statusCode).toBe(201)
+      })
+      .then(() =>
+        request(app)
+          .get(ENDPOINT)
+          .query({
+            date: NEW_TODO_DATA.date,
+            col: 'order_num',
+            dir: 'DESC'
+          })
+          .then(res => {
+            expect(res.statusCode).toBe(200)
+            expect(res.body.type).toBe(TYPE)
+            expect(res.body.data).toBeInstanceOf(Array)
+            expect(res.body.data.length).toBe(2)
+            expect(res.body.data[0].date).toBe(res.body.data[1].date)
+            expect(res.body.data[0].order_num).toBeGreaterThan(res.body.data[1].order_num)
+            expect(res.body.data[0].name).not.toBe(res.body.data[1].name)
+          })
+      )
+  })
 })
