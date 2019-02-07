@@ -2,6 +2,7 @@ import moment from 'moment'
 import { IDatabase } from 'pg-promise'
 
 import Todo from '../../types/Todo'
+import { genQueryVarScaffold } from '.'
 
 export const TABLE = 'todos'
 
@@ -24,7 +25,7 @@ export const getTodoById = (db: IDatabase<any>, id: number): Promise<Todo> =>
 export const getTodos = (
   db: IDatabase<any>, // eslint-disable-line @typescript-eslint/no-explicit-any
   date?: string,
-  orderCol: 'id' | 'order_num' = 'id',
+  orderCol: 'id' | 'date' | 'order_num' = 'id',
   orderDir: 'ASC' | 'DESC' = 'DESC'
 ): Promise<Todo[]> => {
   let text = `SELECT * FROM ${TABLE} `
@@ -35,33 +36,27 @@ export const getTodos = (
   }
   if (whereText) text += whereText
 
-  text += 'ORDER BY $1:raw $2:raw'
+  text += 'ORDER BY $1# $2#'
 
   return db.any(text, [orderCol, orderDir])
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const patchTodo = (db: IDatabase<any>, id: number, data: Partial<Todo>): Promise<Todo> => {
-  const nameVals = []
-  const vals: (number | string)[] = [id]
-  Object.keys(data).forEach(key => {
-    if (key === 'completed_at' || key === 'date' || key === 'details' || key === 'order_num' || key === 'name') {
-      if (data[key] || data[key] === null) {
-        nameVals.push({ name: key, val: data[key] })
-        vals.push(data[key])
-      }
-    }
-  })
+  const queryVarScaffold = genQueryVarScaffold(data, ['completed_at', 'date', 'details', 'order_num', 'name'], id)
+  const indexVars = []
 
   let text = `UPDATE ${TABLE} SET`
-  nameVals.forEach((ele, i) => {
-    let str = ` ${ele.name}=$${i + 2}`
-    if (i !== nameVals.length - 1) {
+  queryVarScaffold.forEach((ele, i) => {
+    indexVars.push(ele.val)
+    if (ele.name === 'id') return
+    let str = ` ${ele.name}=$${i + 1}`
+    if (i !== queryVarScaffold.length - 1) {
       str += ','
     }
     text += str
   })
   text += ' WHERE id = $1 RETURNING *'
 
-  return db.one(text, vals)
+  return db.one(text, indexVars)
 }
