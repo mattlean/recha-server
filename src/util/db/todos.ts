@@ -2,7 +2,6 @@ import moment from 'moment'
 import { IDatabase } from 'pg-promise'
 
 import Todo from '../../types/Todo'
-import { genErr } from '../err'
 
 export const TABLE = 'todos'
 
@@ -16,10 +15,7 @@ export const createTodo = (db: IDatabase<any>, data: Partial<Todo>): Promise<Tod
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const deleteTodo = (db: IDatabase<any>, id: number): Promise<Todo> =>
-  db.one(`DELETE FROM ${TABLE} WHERE id = $1 RETURNING *`, [id]).then(result => {
-    if (!result) throw genErr(404)
-    return result
-  })
+  db.one(`DELETE FROM ${TABLE} WHERE id = $1 RETURNING *`, [id])
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const getTodoById = (db: IDatabase<any>, id: number): Promise<Todo> =>

@@ -127,8 +127,6 @@ describe('Todo endpoints', () => {
         expect(res.body.type).toBe(ERR_TYPE)
       }))
 
-  // TODO: Test GET list query params
-
   it('should delete a specific todo', () =>
     request(app)
       .del(`${ENDPOINT}/${todo.id}`)
@@ -167,4 +165,59 @@ describe('Todo endpoints', () => {
         expect(res.statusCode).toBe(404)
         expect(res.body.type).toBe(ERR_TYPE)
       }))
+
+  it('should list all todos by date ascending', () => {
+    // eslint-disable-next-line jest/valid-expect-in-promise
+    const firstTodo = request(app)
+      .post(ENDPOINT)
+      .send({
+        date: '1970-01-01T08:00:00.000Z',
+        name: 'Earliest Todo'
+      })
+      .then(res => {
+        expect(res.statusCode).toBe(201)
+        return res
+      })
+
+    // eslint-disable-next-line jest/valid-expect-in-promise
+    const secondTodo = request(app)
+      .post(ENDPOINT)
+      .send({
+        date: '2038-12-30T08:00:00.000Z',
+        name: 'Latest Todo'
+      })
+      .then(res => {
+        expect(res.statusCode).toBe(201)
+        return res
+      })
+
+    // eslint-disable-next-line jest/valid-expect-in-promise
+    const thirdTodo = request(app)
+      .post(ENDPOINT)
+      .send({
+        date: '2019-02-02T08:00:00.000Z',
+        name: 'Middle Todo'
+      })
+      .then(res => {
+        expect(res.statusCode).toBe(201)
+        return res
+      })
+
+    return Promise.all([firstTodo, secondTodo, thirdTodo]).then(todos =>
+      request(app)
+        .get(ENDPOINT)
+        .query({
+          col: 'date',
+          dir: 'ASC'
+        })
+        .then(res => {
+          expect(res.statusCode).toBe(200)
+          expect(res.body.type).toBe(TYPE)
+          expect(res.body.data).toBeInstanceOf(Array)
+          expect(res.body.data[0].date).toBe(todos[0].body.data.date)
+          expect(res.body.data[1].date).toBe(todos[2].body.data.date)
+          expect(res.body.data[2].date).toBe(todos[1].body.data.date)
+        })
+    )
+  })
 })
