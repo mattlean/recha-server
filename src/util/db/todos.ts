@@ -7,12 +7,28 @@ import { genQueryVarScaffold } from '.'
 export const TABLE = 'todos'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const createTodo = (db: IDatabase<any>, data: Partial<Todo>): Promise<Todo> =>
-  db.one(`INSERT INTO ${TABLE} (date, name, details) VALUES ($1, $2, $3) RETURNING *`, [
-    data.date,
-    data.name,
-    data.details
-  ])
+export const createTodo = (db: IDatabase<any>, data: Partial<Todo>): Promise<Todo> => {
+  const queryVarScaffold = genQueryVarScaffold(data, ['completed_at', 'date', 'details', 'order_num', 'name'])
+  const indexVars = []
+  let cols = ''
+  let vals = ''
+
+  let text = `INSERT INTO ${TABLE} (`
+  queryVarScaffold.forEach((ele, i) => {
+    indexVars.push(ele.val)
+    let newCol = ele.name
+    let newVal = `$${i + 1}`
+    if (i !== queryVarScaffold.length - 1) {
+      newCol += ', '
+      newVal += ', '
+    }
+    cols += newCol
+    vals += newVal
+  })
+  text += `${cols}) VALUES (${vals}) RETURNING *`
+
+  return db.one(text, indexVars)
+}
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const deleteTodo = (db: IDatabase<any>, id: number): Promise<Todo> =>
