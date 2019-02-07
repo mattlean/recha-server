@@ -10,11 +10,22 @@ interface ApiData {
   VER?: number
 }
 
+/**
+ * Normalizes API responses
+ * @param data Database query results
+ * @param type API resource data types
+ * @returns Normalized API response
+ */
 export const formatAPIRes = <T>(data: T, type: Types): APIRes<T> => ({
   data,
   type
 })
 
+/**
+ * Generate API metadata
+ * @param ver API version number
+ * @returns API metadata
+ */
 export const genApiData = (ver?: number): ApiData => {
   const data: ApiData = {
     API: API.NAME,

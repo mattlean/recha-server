@@ -8,7 +8,13 @@ interface ErrData {
   status?: number
 }
 
-export const genErr = (status?: number, message?: string): ServerErr => {
+/**
+ * Generate ServerErr instance
+ * @param status (Optional) HTTP status code. Defaults to 500.
+ * @param message (Optional) Error message. Has some default values if left unset depending on status.
+ * @returns ServerErr
+ */
+export const genErr = (status: number = 500, message?: string): ServerErr => {
   let m = message
   if (!m) {
     switch (status) {
@@ -29,6 +35,11 @@ export const genErr = (status?: number, message?: string): ServerErr => {
   return new ServerErr(m, status)
 }
 
+/**
+ * Generate API error response. Handles some error codes set by PostgreSQL.
+ * @param err ServerError instance
+ * @returns API error response
+ */
 export const genErrRes = (err: ServerErr): APIRes<ErrData> => {
   let { status } = err
   const code = String(err.code)

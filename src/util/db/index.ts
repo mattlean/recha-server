@@ -34,7 +34,7 @@ export const checkIfAColValExists = (data: { [key: string]: any }, colVals: stri
 export const checkRequiredColVals = (data: { [key: string]: any }, requiredColVals: string[]): boolean => {
   for (let i = 0; i < requiredColVals.length; i += 1) {
     const key = requiredColVals[i]
-    if (data[key] === undefined) return false
+    if (data[key] === undefined || data[key] === null) return false
   }
   return true
 }
