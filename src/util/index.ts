@@ -1,4 +1,3 @@
-/* eslint import/prefer-default-export: 0 */
 import * as db from './db'
 import * as err from './err'
 import logger from './logger'

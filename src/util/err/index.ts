@@ -1,4 +1,3 @@
-/* eslint import/prefer-default-export: 0 */
 import ServerErr from './ServerErr'
 import { formatAPIRes } from '../index'
 import { APIRes, ERR_TYPE } from '../../types'
@@ -13,6 +12,9 @@ export const genErr = (status?: number, message?: string): ServerErr => {
   let m = message
   if (!m) {
     switch (status) {
+      case 400:
+        m = 'Bad request'
+        break
       case 404:
         m = 'Not found'
         break

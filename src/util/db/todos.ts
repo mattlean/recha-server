@@ -2,13 +2,18 @@ import moment from 'moment'
 import { IDatabase } from 'pg-promise'
 
 import Todo from '../../types/Todo'
-import { genQueryVarScaffold } from '.'
+import { checkIfAColValExists, checkRequiredColVals, genQueryVarScaffold } from '.'
+import { genErr } from '../err'
 
 export const TABLE = 'todos'
 
+const VALID_COLS = ['completed_at', 'date', 'details', 'order_num', 'name']
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const createTodo = (db: IDatabase<any>, data: Partial<Todo>): Promise<Todo> => {
-  const queryVarScaffold = genQueryVarScaffold(data, ['completed_at', 'date', 'details', 'order_num', 'name'])
+  if (!checkRequiredColVals(data, ['date', 'name'])) throw genErr(400, 'Required column value missing')
+
+  const queryVarScaffold = genQueryVarScaffold(data, VALID_COLS)
   const indexVars = []
   let cols = ''
   let vals = ''
@@ -59,7 +64,9 @@ export const getTodos = (
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const patchTodo = (db: IDatabase<any>, id: number, data: Partial<Todo>): Promise<Todo> => {
-  const queryVarScaffold = genQueryVarScaffold(data, ['completed_at', 'date', 'details', 'order_num', 'name'], id)
+  if (!checkIfAColValExists(data, VALID_COLS)) throw genErr(400, 'At least one valid column value is required')
+
+  const queryVarScaffold = genQueryVarScaffold(data, VALID_COLS, id)
   const indexVars = []
 
   let text = `UPDATE ${TABLE} SET`
