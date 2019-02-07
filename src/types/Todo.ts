@@ -1,5 +1,11 @@
+/**
+ * Constant API response type for todos
+ */
 export const TYPE = 'Todo'
 
+/**
+ * Interface for Todo row data
+ */
 export default interface Todo {
   id: number
   date: string
@@ -9,5 +15,4 @@ export default interface Todo {
   details?: string
   created_at: string
   updated_at: string
-  type: typeof TYPE
 }
