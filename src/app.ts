@@ -52,7 +52,7 @@ app.use((err, req, res, next) => {
   }
 
   const errRes = genErrRes(err)
-  res.status(errRes.data.status).json(errRes)
+  res.status(errRes.data.statusCode).json(errRes)
 })
 
 export default app

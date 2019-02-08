@@ -2,7 +2,7 @@
 import { IDatabase } from 'pg-promise'
 
 /**
- * Clear all rows in database table. Only works for test environment!
+ * Clear all rows in database table. Only works in test environment.
  * @param db pg-promise Database object
  * @param table Database table name
  */

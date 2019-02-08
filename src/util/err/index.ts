@@ -5,19 +5,19 @@ import { APIRes, ERR_TYPE } from '../../types'
 interface ErrData {
   code?: number
   message?: string
-  status?: number
+  statusCode?: number
 }
 
 /**
  * Generate ServerErr instance
- * @param status (Optional) HTTP status code. Defaults to 500.
- * @param message (Optional) Error message. Has some default values if left unset depending on status.
+ * @param statusCode (Optional) HTTP status code. Defaults to 500.
+ * @param message (Optional) Error message. Has some default values if left unset depending on status code.
  * @returns ServerErr
  */
-export const genErr = (status: number = 500, message?: string): ServerErr => {
+export const genErr = (statusCode: number = 500, message?: string): ServerErr => {
   let m = message
   if (!m) {
-    switch (status) {
+    switch (statusCode) {
       case 400:
         m = 'Bad request'
         break
@@ -32,7 +32,7 @@ export const genErr = (status: number = 500, message?: string): ServerErr => {
     }
   }
 
-  return new ServerErr(m, status)
+  return new ServerErr(m, statusCode)
 }
 
 /**
@@ -41,20 +41,20 @@ export const genErr = (status: number = 500, message?: string): ServerErr => {
  * @returns API error response
  */
 export const genErrRes = (err: ServerErr): APIRes<ErrData> => {
-  let { status } = err
+  let { statusCode } = err
   const code = String(err.code)
 
-  if (code && !status) {
+  if (code && !statusCode) {
     if (code === '0') {
-      status = 404
+      statusCode = 404
     } else if (code === '22007' || code === '22P02' || code === '23502') {
-      status = 400
+      statusCode = 400
     }
   }
 
   return formatAPIRes<ErrData>(
     {
-      status: status || 500,
+      statusCode: statusCode || 500,
       message: err.message || 'Something broke!'
     },
     ERR_TYPE
