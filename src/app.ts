@@ -16,7 +16,7 @@ app.use(helmet())
 app.use(compression())
 app.use(json())
 
-// Logging middleware
+/* Logging middleware */
 if (process.env.NODE_ENV === 'development') {
   app.use((req, res, next) => {
     logger.debug(`${req.method} ${req.path}`)
@@ -24,7 +24,7 @@ if (process.env.NODE_ENV === 'development') {
   })
 }
 
-// CORS setup
+/* CORS setup */
 if (CLIENT) {
   // eslint-disable-next-line no-unused-vars
   app.use((req, res, next) => {
@@ -42,10 +42,10 @@ app.get('/', (req, res) => res.json(genApiData()))
 
 app.use(`${API.VERS.V1.PATH}`, routeV1)
 
-// 404
+/* Not found handler */
 app.use((req, res, next) => next(genErr(404))) // eslint-disable-line no-unused-vars
 
-// Error handler
+/* Error handler */
 app.use((err, req, res, next) => {
   if (process.env.NODE_ENV !== 'test') {
     logger.error(err.stack)
