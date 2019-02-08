@@ -142,4 +142,6 @@ describe('validateInput', () => {
   // TODO: test exitASAP
 
   // TODO: test requireModes
+
+  // TODO: test missing
 })

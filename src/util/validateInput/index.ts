@@ -112,6 +112,7 @@ const validateInput = (input: object, constraints: Constraints, options: Options
     if ((isRequired || requireMode === 'all') && currVal === undefined) {
       // Missing required property
       addValidationResult(result, currKey, false, ERRS[1](currKey))
+      result.missing.push(currKey)
       if (exitASAP) return result
     }
 
