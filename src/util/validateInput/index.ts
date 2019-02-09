@@ -1,4 +1,4 @@
-import { toDate } from 'validator'
+import { isIn as validatorIsIn, toDate } from 'validator'
 
 import { Constraints, Options, outputType, ValidateInputResult } from './types'
 
@@ -13,7 +13,8 @@ export const ERRS = {
   6: (key: string, min: number, length: number) =>
     `"${key}" property must be greater than or equal to ${min} characters long. Received ${length} characters.`,
   7: (key: string, max: number, length: number) =>
-    `"${key}" property must be less than or equal to ${max} characters long. Received ${length} characters.`
+    `"${key}" property must be less than or equal to ${max} characters long. Received ${length} characters.`,
+  8: (key: string, isIn: string[]) => `"${key}" property only allows the following values: ${isIn.join(', ')}`
 }
 
 const createValidateInputResult = (input: object, constraints: Constraints, options: Options): ValidateInputResult => ({
@@ -147,11 +148,18 @@ const validateInput = (input: object, constraints: Constraints, options: Options
     }
 
     if (strRules && Object.keys(strRules).length > 0 && currValType === 'string' && (type === 'string' || !type)) {
-      const { isDate, isLength } = strRules
+      const { isDate, isIn, isLength } = strRules
 
       if (isDate) {
         if (toDate(currVal) === null) {
           addValidationResult(result, currKey, false, ERRS[5](currKey))
+          if (exitASAP) return result
+        }
+      }
+
+      if (Array.isArray(isIn)) {
+        if (!validatorIsIn(currVal, isIn)) {
+          addValidationResult(result, currKey, false, ERRS[8](currKey, isIn))
           if (exitASAP) return result
         }
       }

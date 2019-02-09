@@ -13,12 +13,26 @@ const constraints = {
   completed_at: { allowNull: true, type: 'string', strRules: { isDate: true } },
   date: { isRequired: true, type: 'string', strRules: { isDate: true } },
   details: { allowNull: true, type: 'string', strRules: { isLength: { max: 1024 } } },
-  name: { isRequired: true, type: 'string', strRules: { isLength: { max: 280 } } },
+  name: { isRequired: true, type: 'string', strRules: { isLength: { min: 1, max: 280 } } },
   order_num: { allowNull: true, type: 'number' }
 }
 
 router.get('/', (req, res, next) => {
   const { col, date, dir } = req.query
+  const invalids = validateInput(
+    { col, date, dir },
+    {
+      col: { type: 'string', strRules: { isIn: ['id', 'date', 'order_num'] } },
+      date: { type: 'string', strRules: { isDate: true } },
+      dir: { type: 'string', strRules: { isIn: ['ASC', 'DESC'] } }
+    },
+    {
+      exitASAP: true
+    }
+  ).showInvalidResults('array')
+
+  if (invalids.length > 0) return next(genErr(400, invalids[0]))
+
   return getTodos(db, date, col, dir)
     .then(result => {
       res.locals.result = result

@@ -24,6 +24,8 @@ BEFORE UPDATE ON todos
 FOR EACH ROW
 EXECUTE PROCEDURE trigger_set_timestamp();
 
+-- TODO: set minimum character check for name
+
 GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO me;
 
 GRANT USAGE, SELECT ON SEQUENCE todos_id_seq TO me;

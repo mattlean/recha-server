@@ -48,7 +48,10 @@ app.use((req, res, next) => next(genErr(404))) // eslint-disable-line no-unused-
 /* Error handler */
 app.use((err, req, res, next) => {
   if (process.env.NODE_ENV !== 'test') {
-    logger.error(err.stack)
+    let errMessage = ''
+    if (err.code) errMessage += `CODE: ${err.code} - `
+    errMessage += err.stack
+    logger.error(errMessage)
   }
 
   const errRes = genErrRes(err)

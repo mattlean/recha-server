@@ -47,7 +47,7 @@ export const genErrRes = (err: ServerErr): APIRes<ErrData> => {
   if (code && !statusCode) {
     if (code === '0') {
       statusCode = 404
-    } else if (code === '22007' || code === '22P02' || code === '23502') {
+    } else if (code === '22007' || code === '22P02' || code === '23502' || code === '42703') {
       statusCode = 400
     }
   }

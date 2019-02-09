@@ -20,6 +20,7 @@ type requireMode = 'all' | 'atLeastOne' | 'default'
 
 interface StrRules {
   isDate?: boolean
+  isIn?: string[]
   isLength?: {
     max?: number
     min?: number

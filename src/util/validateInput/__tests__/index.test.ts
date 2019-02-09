@@ -1,5 +1,7 @@
 import validateInput, { ERRS } from '..'
 
+// TODO: separate tests into groups
+
 describe('validateInput', () => {
   it('should throw error if input or constraint is an array', () => {
     expect(() => validateInput([], {})).toThrow(ERRS[0]())
@@ -286,6 +288,26 @@ describe('validateInput', () => {
 
   it('should return passing result due to passing both min and max length constraints', () => {
     const result = validateInput({ foo: '123' }, { foo: { strRules: { isLength: { min: 2, max: 4 } } } })
+    expect(result.results.foo.isValid).toBe(true)
+    expect(result.pass).toBe(true)
+  })
+
+  it('should return failing result due to failing isIn string rule', () => {
+    const result = validateInput({ foo: '123' }, { foo: { strRules: { isIn: ['ABC'] } } })
+    expect(result.results.foo.isValid).toBe(false)
+    expect(result.results.foo.reasons[0]).toBe(ERRS[8]('foo', ['ABC']))
+    expect(result.pass).toBe(false)
+  })
+
+  it('should return failing result due to failing isIn string rule with empty array', () => {
+    const result = validateInput({ foo: '123' }, { foo: { strRules: { isIn: [] } } })
+    expect(result.results.foo.isValid).toBe(false)
+    expect(result.results.foo.reasons[0]).toBe(ERRS[8]('foo', []))
+    expect(result.pass).toBe(false)
+  })
+
+  it('should return passing result due to passing isIn string rule', () => {
+    const result = validateInput({ foo: 'ABC' }, { foo: { strRules: { isIn: ['ABC'] } } })
     expect(result.results.foo.isValid).toBe(true)
     expect(result.pass).toBe(true)
   })
