@@ -9,6 +9,63 @@ export const ERRS = {
   4: () => '"atLeastOne" require mode requires at least one property to be validated.'
 }
 
+const createValidateInputResult = (input: object, constraints: Constraints, options: Options): ValidateInputResult => ({
+  constraints,
+  input,
+  missing: [],
+  options,
+  pass: true,
+  results: {},
+  showInvalidResults(type?: outputType) {
+    const resultsKeys = Object.keys(this.results)
+
+    let invalidResults
+
+    if (type === 'object') {
+      invalidResults = {}
+    } else {
+      invalidResults = []
+    }
+
+    resultsKeys.forEach(key => {
+      const currResult = this.results[key]
+      if (!currResult.isValid) {
+        if (type === 'object') {
+          invalidResults[key] = currResult.reasons
+        } else {
+          invalidResults.push(...this.results[key].reasons)
+        }
+      }
+    })
+
+    return invalidResults
+  },
+  showValidResults(type?: outputType) {
+    const resultsKeys = Object.keys(this.results)
+
+    let validResults
+
+    if (type === 'object') {
+      validResults = {}
+    } else {
+      validResults = []
+    }
+
+    resultsKeys.forEach(key => {
+      const currResult = this.results[key]
+      if (currResult.isValid) {
+        if (type === 'object') {
+          validResults[key] = true
+        } else {
+          validResults.push(key)
+        }
+      }
+    })
+
+    return validResults
+  }
+})
+
 const addValidationResult = (
   validateInputResult: ValidateInputResult,
   key: string,
@@ -31,7 +88,7 @@ const addValidationResult = (
 }
 
 /**
- * Validate inputs
+ * Validate input
  * @param input Input object of key and value pairs
  * @param constraints Constraints that the input is validated with
  * @param options (Optional) Options to set different validation behaviors
@@ -43,62 +100,7 @@ const validateInput = (input: object, constraints: Constraints, options: Options
     throw new Error(ERRS[0]())
   }
 
-  const result: ValidateInputResult = {
-    constraints,
-    input,
-    missing: [],
-    options,
-    pass: true,
-    results: {},
-    showInvalidResults(type?: outputType) {
-      const resultsKeys = Object.keys(this.results)
-
-      let invalidResults
-
-      if (type === 'object') {
-        invalidResults = {}
-      } else {
-        invalidResults = []
-      }
-
-      resultsKeys.forEach(key => {
-        const currResult = this.results[key]
-        if (!currResult.isValid) {
-          if (type === 'object') {
-            invalidResults[key] = currResult.reasons
-          } else {
-            invalidResults.push(...this.results[key].reasons)
-          }
-        }
-      })
-
-      return invalidResults
-    },
-    showValidResults(type?: outputType) {
-      const resultsKeys = Object.keys(this.results)
-
-      let validResults
-
-      if (type === 'object') {
-        validResults = {}
-      } else {
-        validResults = []
-      }
-
-      resultsKeys.forEach(key => {
-        const currResult = this.results[key]
-        if (currResult.isValid) {
-          if (type === 'object') {
-            validResults[key] = true
-          } else {
-            validResults.push(key)
-          }
-        }
-      })
-
-      return validResults
-    }
-  }
+  const result = createValidateInputResult(input, constraints, options)
 
   let atLeastOne = false
   const constraintsKeys = Object.keys(constraints)
@@ -123,7 +125,11 @@ const validateInput = (input: object, constraints: Constraints, options: Options
     if (currVal === null) currValType = 'null'
     else currValType = typeof currVal
 
-    if (type && ((currVal === null && type !== 'null' && !allowNull) || (currVal !== null && currValType !== type))) {
+    if (
+      type &&
+      ((currVal === null && type !== 'null' && !allowNull) ||
+        ((currVal || currVal === '' || currVal === false) && currValType !== type))
+    ) {
       // Type mismatch
       addValidationResult(result, currKey, false, ERRS[2](currKey, type, currValType))
       if (exitASAP) return result

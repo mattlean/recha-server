@@ -1,10 +1,6 @@
 import validateInput, { ERRS } from '..'
 
 describe('validateInput', () => {
-  const exInput = { bar: 123, baz: null }
-  const exConstraintsA = { foo: { isRequired: true }, bar: { type: 'string' }, baz: {} }
-  const exConstraintsB = { foo: {}, bar: { isRequired: true, type: 'number' }, baz: { allowNull: true } }
-
   it('should throw error if input or constraint is an array', () => {
     expect(() => validateInput([], {})).toThrow(ERRS[0]())
   })
@@ -89,7 +85,10 @@ describe('validateInput', () => {
   })
 
   it('should return failing result due to failing 3 different constraints', () => {
-    const result = validateInput(exInput, exConstraintsA)
+    const result = validateInput(
+      { bar: 123, baz: null },
+      { foo: { isRequired: true }, bar: { type: 'string' }, baz: {} }
+    )
     /* eslint-disable dot-notation */
     expect(result.input['foo']).toBe(undefined)
     expect(result.results.foo.isValid).toBe(false)
@@ -105,7 +104,10 @@ describe('validateInput', () => {
   })
 
   it('should show array of invalid results with showInvalidResults()', () => {
-    const invalidResults = validateInput(exInput, exConstraintsA).showInvalidResults('array')
+    const invalidResults = validateInput(
+      { bar: 123, baz: null },
+      { foo: { isRequired: true }, bar: { type: 'string' }, baz: {} }
+    ).showInvalidResults('array')
     expect(Array.isArray(invalidResults)).toBe(true)
     expect(invalidResults.length).toBe(3)
     expect(invalidResults[0]).toBe(ERRS[1]('foo'))
@@ -114,7 +116,10 @@ describe('validateInput', () => {
   })
 
   it('should show object of invalid results with showInvalidResults()', () => {
-    const invalidResults = validateInput(exInput, exConstraintsA).showInvalidResults('object')
+    const invalidResults = validateInput(
+      { bar: 123, baz: null },
+      { foo: { isRequired: true }, bar: { type: 'string' }, baz: {} }
+    ).showInvalidResults('object')
     expect(typeof invalidResults).toBe('object')
     /* eslint-disable dot-notation */
     expect(Array.isArray(invalidResults['foo'])).toBe(true)
@@ -130,7 +135,10 @@ describe('validateInput', () => {
   })
 
   it('should show array of valid results with showValidResults()', () => {
-    const validResults = validateInput(exInput, exConstraintsB).showValidResults('array')
+    const validResults = validateInput(
+      { bar: 123, baz: null },
+      { foo: {}, bar: { isRequired: true, type: 'number' }, baz: { allowNull: true } }
+    ).showValidResults('array')
     expect(Array.isArray(validResults)).toBe(true)
     expect(validResults.length).toBe(3)
     expect(validResults[0]).toBe('foo')
@@ -139,7 +147,10 @@ describe('validateInput', () => {
   })
 
   it('should show object of valid results with showValidResults()', () => {
-    const validResults = validateInput(exInput, exConstraintsB).showValidResults('object')
+    const validResults = validateInput(
+      { bar: 123, baz: null },
+      { foo: {}, bar: { isRequired: true, type: 'number' }, baz: { allowNull: true } }
+    ).showValidResults('object')
     expect(typeof validResults).toBe('object')
     /* eslint-disable dot-notation */
     expect(validResults['foo']).toBe(true)
