@@ -18,6 +18,8 @@ describe('validateInput', () => {
     expect(result.input['foo']).toBe(undefined) // eslint-disable-line dot-notation
     expect(result.results.foo.isValid).toBe(false)
     expect(result.results.foo.reasons[0]).toBe(ERRS[1]('foo'))
+    expect(result.missing.length).toBe(1)
+    expect(result.missing[0]).toBe('foo')
     expect(result.pass).toBe(false)
   })
 
@@ -26,6 +28,7 @@ describe('validateInput', () => {
     expect(result.input['bar']).toBe(123) // eslint-disable-line dot-notation
     expect(result.results.bar.isValid).toBe(true)
     expect(result.results.bar.reasons.length).toBe(0)
+    expect(result.missing.length).toBe(0)
     expect(result.pass).toBe(true)
   })
 
@@ -54,7 +57,7 @@ describe('validateInput', () => {
   })
 
   it('should return passing result for having matching null type', () => {
-    const result = validateInput({ foo: null }, { foo: { allowNull: true, type: 'null' } })
+    const result = validateInput({ foo: null }, { foo: { type: 'null' } })
     expect(result.input['foo']).toBe(null) // eslint-disable-line dot-notation
     expect(result.results.foo.isValid).toBe(true)
     expect(result.results.foo.reasons.length).toBe(0)
@@ -71,6 +74,14 @@ describe('validateInput', () => {
 
   it('should return passing result for having null input property value', () => {
     const result = validateInput({ foo: null }, { foo: { allowNull: true } })
+    expect(result.input['foo']).toBe(null) // eslint-disable-line dot-notation
+    expect(result.results.foo.isValid).toBe(true)
+    expect(result.results.foo.reasons.length).toBe(0)
+    expect(result.pass).toBe(true)
+  })
+
+  it('should return passing result for having null input property value when type matching for string but also allowing null', () => {
+    const result = validateInput({ foo: null }, { foo: { allowNull: true, type: 'string' } })
     expect(result.input['foo']).toBe(null) // eslint-disable-line dot-notation
     expect(result.results.foo.isValid).toBe(true)
     expect(result.results.foo.reasons.length).toBe(0)
@@ -137,11 +148,37 @@ describe('validateInput', () => {
     /* eslint-enable dot-notation */
   })
 
-  // TODO: test multiple reasons on one key
+  it('should return multiple failed results on one key', () => {
+    const result = validateInput(
+      { foo: null },
+      { foo: { allowNull: false, type: 'string' }, bar: { isRequired: true } }
+    )
+    expect(result.input['foo']).toBe(null) // eslint-disable-line dot-notation
+    expect(result.results.foo.isValid).toBe(false)
+    expect(result.results.foo.reasons.length).toBe(2)
+    expect(result.results.foo.reasons[0]).toBe(ERRS[2]('foo', 'string', 'object'))
+    expect(result.results.foo.reasons[1]).toBe(ERRS[3]('foo'))
+    expect(result.input['bar']).toBe(undefined) // eslint-disable-line dot-notation
+    expect(result.results.bar.isValid).toBe(false)
+    expect(result.results.bar.reasons.length).toBe(1)
+    expect(result.results.bar.reasons[0]).toBe(ERRS[1]('bar'))
+    expect(result.missing.length).toBe(1)
+    expect(result.missing[0]).toBe('bar')
+    expect(result.pass).toBe(false)
+  })
 
-  // TODO: test exitASAP
+  it('should return only one result when exitASAP option is set', () => {
+    const result = validateInput(
+      { foo: null },
+      { foo: { allowNull: false, type: 'string' }, bar: { isRequired: true } },
+      { exitASAP: true }
+    )
+    expect(result.results.foo.isValid).toBe(false)
+    expect(result.results.foo.reasons.length).toBe(1)
+    expect(result.results.foo.reasons[0]).toBe(ERRS[2]('foo', 'string', 'object'))
+    expect(Object.keys(result.results.foo.reasons).length).toBe(1)
+    expect(result.missing.length).toBe(0)
+  })
 
   // TODO: test requireModes
-
-  // TODO: test missing
 })

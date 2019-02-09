@@ -117,16 +117,13 @@ const validateInput = (input: object, constraints: Constraints, options: Options
     }
 
     const currValType = typeof currVal
-    if (
-      (type || type === null) &&
-      ((type === 'null' && currVal !== null) || (currValType !== type && currVal !== null))
-    ) {
+    if (type && ((currVal === null && type !== 'null' && !allowNull) || (currVal !== null && currValType !== type))) {
       // Type mismatch
       addValidationResult(result, currKey, false, ERRS[2](currKey, type, currValType))
       if (exitASAP) return result
     }
 
-    if (!allowNull && currVal === null) {
+    if (!allowNull && currVal === null && type !== 'null') {
       // Forbidden null
       addValidationResult(result, currKey, false, ERRS[3](currKey))
       if (exitASAP) return result
