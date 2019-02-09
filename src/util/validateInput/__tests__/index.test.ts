@@ -156,7 +156,7 @@ describe('validateInput', () => {
     expect(result.input['foo']).toBe(null) // eslint-disable-line dot-notation
     expect(result.results.foo.isValid).toBe(false)
     expect(result.results.foo.reasons.length).toBe(2)
-    expect(result.results.foo.reasons[0]).toBe(ERRS[2]('foo', 'string', 'object'))
+    expect(result.results.foo.reasons[0]).toBe(ERRS[2]('foo', 'string', 'null'))
     expect(result.results.foo.reasons[1]).toBe(ERRS[3]('foo'))
     expect(result.input['bar']).toBe(undefined) // eslint-disable-line dot-notation
     expect(result.results.bar.isValid).toBe(false)
@@ -170,15 +170,58 @@ describe('validateInput', () => {
   it('should return only one result when exitASAP option is set', () => {
     const result = validateInput(
       { foo: null },
-      { foo: { allowNull: false, type: 'string' }, bar: { isRequired: true } },
+      { foo: { type: 'string' }, bar: { isRequired: true } },
       { exitASAP: true }
     )
     expect(result.results.foo.isValid).toBe(false)
     expect(result.results.foo.reasons.length).toBe(1)
-    expect(result.results.foo.reasons[0]).toBe(ERRS[2]('foo', 'string', 'object'))
     expect(Object.keys(result.results.foo.reasons).length).toBe(1)
+    expect(result.results.foo.reasons[0]).toBe(ERRS[2]('foo', 'string', 'null'))
     expect(result.missing.length).toBe(0)
+    expect(result.pass).toBe(false)
   })
 
-  // TODO: test requireModes
+  it('should return failing result when requireMode is set to "all" and an input property in constraints is missing', () => {
+    const result = validateInput(
+      { foo: null, bar: 'world' },
+      { foo: { allowNull: true, type: 'string' }, bar: { type: 'string' }, baz: {} },
+      { requireMode: 'all' }
+    )
+    expect(result.results.foo.isValid).toBe(true)
+    expect(result.results.bar.isValid).toBe(true)
+    expect(result.results.baz.isValid).toBe(false)
+    expect(Object.keys(result.results.baz.reasons).length).toBe(1)
+    expect(result.results.baz.reasons[0]).toBe(ERRS[1]('baz'))
+    expect(result.missing.length).toBe(1)
+    expect(result.missing[0]).toBe('baz')
+    expect(result.pass).toBe(false)
+  })
+
+  it('should return passing result when requireMode is set to "all" and an input property in constraints is missing', () => {
+    const result = validateInput(
+      { foo: null, bar: 'world', baz: 'hello' },
+      { foo: { allowNull: true, type: 'string' }, bar: { type: 'string' }, baz: {} },
+      { requireMode: 'all' }
+    )
+    expect(result.results.foo.isValid).toBe(true)
+    expect(result.results.bar.isValid).toBe(true)
+    expect(result.results.baz.isValid).toBe(true)
+    expect(result.missing.length).toBe(0)
+    expect(result.pass).toBe(true)
+  })
+
+  it('should return failing result when requireMode is set to "atLeastOne" and all input properties in constraints are missing', () => {
+    const result = validateInput({ foo: 'hello' }, { bar: { allowNull: true }, baz: {} }, { requireMode: 'atLeastOne' })
+    expect(result.results.requireMode.reasons[0]).toBe(ERRS[4]())
+    expect(result.pass).toBe(false)
+  })
+
+  it('should return passing result when requireMode is set to "atLeastOne" and at least one input property in constraints is set', () => {
+    const result = validateInput(
+      { foo: 'hello' },
+      { foo: {}, bar: { allowNull: true }, baz: {} },
+      { requireMode: 'atLeastOne' }
+    )
+    expect(result.pass).toBe(true)
+  })
 })

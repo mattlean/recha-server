@@ -100,8 +100,9 @@ const validateInput = (input: object, constraints: Constraints, options: Options
     }
   }
 
-  const { requireMode } = options
+  let atLeastOne = false
   const constraintsKeys = Object.keys(constraints)
+  const { requireMode } = options
 
   for (let i = 0; i < constraintsKeys.length; i += 1) {
     const currKey = constraintsKeys[i]
@@ -109,14 +110,19 @@ const validateInput = (input: object, constraints: Constraints, options: Options
     const { allowNull, isRequired, type } = constraints[currKey]
     const { exitASAP } = options
 
-    if ((isRequired || requireMode === 'all') && currVal === undefined) {
+    if (requireMode === 'atLeastOne' && !atLeastOne) {
+      if (currVal !== undefined) atLeastOne = true
+    } else if ((isRequired || requireMode === 'all') && currVal === undefined) {
       // Missing required property
       addValidationResult(result, currKey, false, ERRS[1](currKey))
       result.missing.push(currKey)
       if (exitASAP) return result
     }
 
-    const currValType = typeof currVal
+    let currValType
+    if (currVal === null) currValType = 'null'
+    else currValType = typeof currVal
+
     if (type && ((currVal === null && type !== 'null' && !allowNull) || (currVal !== null && currValType !== type))) {
       // Type mismatch
       addValidationResult(result, currKey, false, ERRS[2](currKey, type, currValType))
@@ -133,7 +139,7 @@ const validateInput = (input: object, constraints: Constraints, options: Options
     if (!result.results[currKey]) addValidationResult(result, currKey, true)
   }
 
-  if (requireMode === 'atLeastOne' && Object.keys(result.results).length === 0) {
+  if (requireMode === 'atLeastOne' && !atLeastOne) {
     result.pass = false
     addValidationResult(result, 'requireMode', false, ERRS[4]())
   }
