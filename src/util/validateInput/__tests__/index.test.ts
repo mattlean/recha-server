@@ -235,4 +235,58 @@ describe('validateInput', () => {
     )
     expect(result.pass).toBe(true)
   })
+
+  it('should return failing result due to using non-date string when date is required', () => {
+    const result = validateInput({ foo: 'hello' }, { foo: { strRules: { isDate: true } } })
+    expect(result.results.foo.isValid).toBe(false)
+    expect(result.results.foo.reasons[0]).toBe(ERRS[5]('foo'))
+    expect(result.pass).toBe(false)
+  })
+
+  it('should return passing result due to using date string when date is required', () => {
+    const result = validateInput({ foo: '2000-01-01' }, { foo: { strRules: { isDate: true } } })
+    expect(result.results.foo.isValid).toBe(true)
+    expect(result.pass).toBe(true)
+  })
+
+  it('should return failing result due to using string shorter than min length', () => {
+    const result = validateInput({ foo: '123' }, { foo: { strRules: { isLength: { min: 4 } } } })
+    expect(result.results.foo.isValid).toBe(false)
+    expect(result.results.foo.reasons[0]).toBe(ERRS[6]('foo', 4, 3))
+    expect(result.pass).toBe(false)
+  })
+
+  it('should return passing result due to using string longer than or equal to min length', () => {
+    const result = validateInput({ foo: '123' }, { foo: { strRules: { isLength: { min: 3 } } } })
+    expect(result.results.foo.isValid).toBe(true)
+    expect(result.pass).toBe(true)
+  })
+
+  it('should return failing result due to using string longer than max length', () => {
+    const result = validateInput({ foo: '123' }, { foo: { strRules: { isLength: { max: 2 } } } })
+    expect(result.results.foo.isValid).toBe(false)
+    expect(result.results.foo.reasons[0]).toBe(ERRS[7]('foo', 2, 3))
+    expect(result.pass).toBe(false)
+  })
+
+  it('should return passing result due to using string less than or equal to max length', () => {
+    const result = validateInput({ foo: '123' }, { foo: { strRules: { isLength: { max: 3 } } } })
+    expect(result.results.foo.isValid).toBe(true)
+    expect(result.pass).toBe(true)
+  })
+
+  it('should return failing result with 2 results due to failing both min and max length constraints', () => {
+    const result = validateInput({ foo: '123' }, { foo: { strRules: { isLength: { min: 4, max: 2 } } } })
+    expect(result.results.foo.isValid).toBe(false)
+    expect(result.results.foo.reasons.length).toBe(2)
+    expect(result.results.foo.reasons[0]).toBe(ERRS[6]('foo', 4, 3))
+    expect(result.results.foo.reasons[1]).toBe(ERRS[7]('foo', 2, 3))
+    expect(result.pass).toBe(false)
+  })
+
+  it('should return passing result due to passing both min and max length constraints', () => {
+    const result = validateInput({ foo: '123' }, { foo: { strRules: { isLength: { min: 2, max: 4 } } } })
+    expect(result.results.foo.isValid).toBe(true)
+    expect(result.pass).toBe(true)
+  })
 })

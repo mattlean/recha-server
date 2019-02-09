@@ -1,7 +1,7 @@
 interface Constraint {
   allowNull?: boolean
   isRequired?: boolean
-  // strRules?: object
+  strRules?: StrRules
   type?: string
 }
 
@@ -17,6 +17,14 @@ export interface Options {
 export type outputType = 'array' | 'object'
 
 type requireMode = 'all' | 'atLeastOne' | 'default'
+
+interface StrRules {
+  isDate?: boolean
+  isLength?: {
+    max?: number
+    min?: number
+  }
+}
 
 interface ValidationResult {
   isValid: boolean
