@@ -1,5 +1,6 @@
 import { Router } from 'express'
 
+import validateInput from '../../util/validateInput'
 import { createTodo, deleteTodo, getTodoById, getTodos, patchTodo } from '../../util/db/todos'
 import { formatAPIRes } from '../../util'
 import { genErr } from '../../util/err'
@@ -7,6 +8,14 @@ import { db } from '../../app'
 import { TYPE } from '../../types/Todo'
 
 const router = Router()
+
+const constraints = {
+  completed_at: { allowNull: true, type: 'string', strRules: { isDate: true } },
+  date: { isRequired: true, type: 'string', strRules: { isDate: true } },
+  details: { allowNull: true, type: 'string', strRules: { isLength: { max: 1024 } } },
+  name: { isRequired: true, type: 'string', strRules: { isLength: { max: 280 } } },
+  order_num: { allowNull: true, type: 'number' }
+}
 
 router.get('/', (req, res, next) => {
   const { col, date, dir } = req.query
@@ -29,6 +38,12 @@ router.get('/:id', (req, res, next) =>
 
 router.post('/', (req, res, next) => {
   const { completed_at, date, details, name, order_num } = req.body
+  const invalids = validateInput({ completed_at, date, details, name, order_num }, constraints, {
+    exitASAP: true
+  }).showInvalidResults('array')
+
+  if (invalids.length > 0) return next(genErr(400, invalids[0]))
+
   return createTodo(db, { completed_at, date, details, name, order_num })
     .then(result => {
       res.status(201)
@@ -40,6 +55,13 @@ router.post('/', (req, res, next) => {
 
 router.patch('/:id', (req, res, next) => {
   const { completed_at, date, details, name, order_num } = req.body
+  const invalids = validateInput({ completed_at, date, details, name, order_num }, constraints, {
+    exitASAP: true,
+    requireMode: 'atLeastOne'
+  }).showInvalidResults('array')
+
+  if (invalids.length > 0) return next(genErr(400, invalids[0]))
+
   return patchTodo(db, req.params.id, { completed_at, date, details, name, order_num })
     .then(result => {
       res.locals.result = result

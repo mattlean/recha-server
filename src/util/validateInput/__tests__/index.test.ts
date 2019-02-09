@@ -167,8 +167,8 @@ describe('validateInput', () => {
     expect(result.input['foo']).toBe(null) // eslint-disable-line dot-notation
     expect(result.results.foo.isValid).toBe(false)
     expect(result.results.foo.reasons.length).toBe(2)
-    expect(result.results.foo.reasons[0]).toBe(ERRS[2]('foo', 'string', 'null'))
-    expect(result.results.foo.reasons[1]).toBe(ERRS[3]('foo'))
+    expect(result.results.foo.reasons[0]).toBe(ERRS[3]('foo'))
+    expect(result.results.foo.reasons[1]).toBe(ERRS[2]('foo', 'string', 'null'))
     expect(result.input['bar']).toBe(undefined) // eslint-disable-line dot-notation
     expect(result.results.bar.isValid).toBe(false)
     expect(result.results.bar.reasons.length).toBe(1)
@@ -187,7 +187,7 @@ describe('validateInput', () => {
     expect(result.results.foo.isValid).toBe(false)
     expect(result.results.foo.reasons.length).toBe(1)
     expect(Object.keys(result.results.foo.reasons).length).toBe(1)
-    expect(result.results.foo.reasons[0]).toBe(ERRS[2]('foo', 'string', 'null'))
+    expect(result.results.foo.reasons[0]).toBe(ERRS[3]('foo'))
     expect(result.missing.length).toBe(0)
     expect(result.pass).toBe(false)
   })

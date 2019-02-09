@@ -117,12 +117,18 @@ const validateInput = (input: object, constraints: Constraints, options: Options
     const { allowNull, isRequired, strRules, type } = constraints[currKey]
     const { exitASAP } = options
 
-    if (requireMode === 'atLeastOne' && !atLeastOne) {
-      if (currVal !== undefined) atLeastOne = true
+    if (requireMode === 'atLeastOne') {
+      if (currVal !== undefined && !atLeastOne) atLeastOne = true
     } else if ((isRequired || requireMode === 'all') && currVal === undefined) {
       // Missing required property
       addValidationResult(result, currKey, false, ERRS[1](currKey))
       result.missing.push(currKey)
+      if (exitASAP) return result
+    }
+
+    if (!allowNull && currVal === null && type !== 'null') {
+      // Forbidden null
+      addValidationResult(result, currKey, false, ERRS[3](currKey))
       if (exitASAP) return result
     }
 
@@ -144,8 +150,10 @@ const validateInput = (input: object, constraints: Constraints, options: Options
       const { isDate, isLength } = strRules
 
       if (isDate) {
-        if (!toDate(currVal)) addValidationResult(result, currKey, false, ERRS[5](currKey))
-        if (exitASAP) return result
+        if (toDate(currVal) === null) {
+          addValidationResult(result, currKey, false, ERRS[5](currKey))
+          if (exitASAP) return result
+        }
       }
 
       if (isLength) {
@@ -163,12 +171,6 @@ const validateInput = (input: object, constraints: Constraints, options: Options
           }
         }
       }
-    }
-
-    if (!allowNull && currVal === null && type !== 'null') {
-      // Forbidden null
-      addValidationResult(result, currKey, false, ERRS[3](currKey))
-      if (exitASAP) return result
     }
 
     // Key value is valid
