@@ -24,7 +24,7 @@ router.get('/', (req, res, next) => {
     {
       col: { type: 'string', strRules: { isIn: ['id', 'date', 'order_num'] } },
       date: { type: 'string', strRules: { isDate: true } },
-      dir: { type: 'string', strRules: { isIn: ['ASC', 'DESC'] } }
+      dir: { type: 'string', strRules: { isIn: ['ASC', 'asc', 'DESC', 'desc'] } }
     },
     {
       exitASAP: true
