@@ -1,7 +1,7 @@
 import { Router } from 'express'
 
 import validateInput from '../../util/validateInput'
-import { createTodo, deleteTodo, getTodoById, getTodos, patchTodo } from '../../util/db/todos'
+import { createTodo, deleteTodo, getTodoById, getTodos, patchTodo, getTodoLists } from '../../util/db/todos'
 import { formatAPIRes } from '../../util'
 import { genErr } from '../../util/err'
 import { db } from '../../app'
@@ -41,14 +41,27 @@ router.get('/', (req, res, next) => {
     .catch(err => next(err))
 })
 
-router.get('/:id', (req, res, next) =>
-  getTodoById(db, req.params.id)
+router.get('/lists', (req, res, next) => {
+  return getTodoLists(db)
     .then(result => {
       res.locals.result = result
       return next()
     })
     .catch(err => next(err))
-)
+})
+
+router.get('/:id', (req, res, next) => {
+  if (req.params.id !== 'lists') {
+    getTodoById(db, req.params.id)
+      .then(result => {
+        res.locals.result = result
+        return next()
+      })
+      .catch(err => next(err))
+  } else {
+    next()
+  }
+})
 
 router.post('/', (req, res, next) => {
   const { completed_at, date, details, name, order_num } = req.body

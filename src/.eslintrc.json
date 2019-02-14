@@ -25,10 +25,7 @@
             "error",
             "unix"
         ],
-        "quotes": [
-            "warn",
-            "single"
-        ],
+        "quotes": 0,
         "semi": [
             "error",
             "never"

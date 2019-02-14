@@ -63,6 +63,13 @@ export const getTodos = (
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const getTodoLists = (db: IDatabase<any>): ReturnType<typeof getTodoLists> =>
+  db.any('SELECT MIN(date) AS date FROM todos GROUP BY date ORDER BY date DESC').then(result => {
+    const newResult = result.map(item => item.date)
+    return newResult
+  })
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const patchTodo = (db: IDatabase<any>, id: number, data: Partial<Todo>): Promise<Todo> => {
   if (!checkIfAColValExists(data, VALID_COLS)) throw genErr(400, 'At least one valid column value is required')
 

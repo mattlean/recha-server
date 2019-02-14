@@ -5,7 +5,7 @@ import InternalErr from './InternalErr'
  * @extends InternalErr
  * @member code Error code
  * @member message A human-readable description of the error
- * @member name Name of Error *
+ * @member name Name of Error
  * @member statusCode HTTP status code
  */
 class ServerErr extends InternalErr {

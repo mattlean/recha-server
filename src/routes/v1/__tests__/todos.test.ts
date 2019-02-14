@@ -88,7 +88,6 @@ describe('Todo endpoints', () => {
         expect(res.body.data.details).toBe(NEW_TODO_DATA.details)
       }))
 
-  // eslint-disable-next-line quotes
   it("should update a specific todo's date, name & details", () =>
     request(app)
       .patch(`${ENDPOINT}/${todo.id}`)
@@ -101,7 +100,6 @@ describe('Todo endpoints', () => {
         expect(res.body.data.details).toBe(UPDATED_TODO_DATA.details)
       }))
 
-  // eslint-disable-next-line quotes
   it("should update a specific todo's completed datetime", () => {
     const completed_at = '2019-01-25T00:53:52.000Z'
 
@@ -118,7 +116,6 @@ describe('Todo endpoints', () => {
       })
   })
 
-  // eslint-disable-next-line quotes
   it("should fail to update a specific todo's name to null", () =>
     request(app)
       .patch(`${ENDPOINT}/${todo.id}`)
@@ -139,7 +136,6 @@ describe('Todo endpoints', () => {
         expect(res.body.data.details).toBe(UPDATED_TODO_DATA.details)
       }))
 
-  // eslint-disable-next-line quotes
   it("should fail to read a specific todo that doesn't exist", () =>
     request(app)
       .get(`${ENDPOINT}/${todo.id}`)
@@ -148,7 +144,6 @@ describe('Todo endpoints', () => {
         expect(res.body.type).toBe(ERR_TYPE)
       }))
 
-  // eslint-disable-next-line quotes
   it("should fail to update a specific todo that doesn't exist", () =>
     request(app)
       .patch(`${ENDPOINT}/${todo.id}`)
@@ -158,7 +153,6 @@ describe('Todo endpoints', () => {
         expect(res.body.type).toBe(ERR_TYPE)
       }))
 
-  // eslint-disable-next-line quotes
   it("should fail to delete a specific todo that doesn't exist", () =>
     request(app)
       .del(`${ENDPOINT}/${todo.id}`)
@@ -251,5 +245,19 @@ describe('Todo endpoints', () => {
             expect(res.body.data[0].name).not.toBe(res.body.data[1].name)
           })
       )
+  })
+
+  it('should list dates where todo lists exist', () => {
+    return request(app)
+      .get(`${ENDPOINT}/lists`)
+      .then(res => {
+        expect(res.statusCode).toBe(200)
+        expect(res.body.type).toBe(TYPE)
+        expect(res.body.data).toBeInstanceOf(Array)
+        expect(res.body.data.length).toBe(3)
+        expect(res.body.data[0]).toBe('2038-12-30T08:00:00.000Z')
+        expect(res.body.data[1]).toBe('2019-02-03T08:00:00.000Z')
+        expect(res.body.data[2]).toBe('1970-01-01T08:00:00.000Z')
+      })
   })
 })
