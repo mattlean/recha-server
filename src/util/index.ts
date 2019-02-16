@@ -2,7 +2,7 @@ import * as db from './db'
 import * as err from './err'
 import logger from './logger'
 import { API } from '../config'
-import { APIRes, Types } from '../types'
+import { APIRes, APITypes } from '../types'
 
 interface ApiData {
   API: string
@@ -16,7 +16,7 @@ interface ApiData {
  * @param type API resource data types
  * @returns Normalized API response
  */
-export const formatAPIRes = <T>(data: T, type: Types): APIRes<T> => ({
+export const formatAPIRes = <T>(data: T, type: APITypes): APIRes<T> => ({
   data,
   type
 })
