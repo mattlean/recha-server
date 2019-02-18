@@ -1,4 +1,5 @@
-import validateInput, { ERRS } from '..'
+import validateInput from '..'
+import ERRS from '../errs'
 
 // TODO: separate tests into groups
 
