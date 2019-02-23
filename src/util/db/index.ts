@@ -10,36 +10,6 @@ interface QueryVarScaffold {
 }
 
 /**
- * Check if at least one database table column value is included in the database row data
- * @param data Database row data
- * @param colVals Array of database table column names
- * @returns True if at least one database table column value is included in the database row data, false otherwise
- */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const checkIfAColValExists = (data: { [key: string]: any }, colVals: string[]): boolean => {
-  for (let i = 0; i < colVals.length; i += 1) {
-    const key = colVals[i]
-    if (data[key] !== undefined) return true
-  }
-  return false
-}
-
-/**
- * Check if all required database tabke column values are included in the database row data
- * @param data Database row data
- * @param requiredColVals Array of required database table column names
- * @returns True if all of the required database table column values are included in the database row data, false otherwise
- */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const checkRequiredColVals = (data: { [key: string]: any }, requiredColVals: string[]): boolean => {
-  for (let i = 0; i < requiredColVals.length; i += 1) {
-    const key = requiredColVals[i]
-    if (data[key] === undefined || data[key] === null) return false
-  }
-  return true
-}
-
-/**
  * Create a pg-promise Database object
  * @param DB_CONFIG Database configuration object
  * @param app (Optional) Express application. The database will be assigned to its local variables.

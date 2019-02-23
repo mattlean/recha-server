@@ -2,18 +2,14 @@ import moment from 'moment'
 import { IDatabase } from 'pg-promise'
 
 import Todo from '../../types/Todo'
-import { checkIfAColValExists, checkRequiredColVals, genQueryVarScaffold } from '.'
-import { genErr } from '../err'
+import { genQueryVarScaffold } from '.'
 
 export const TABLE = 'todos'
-
-const VALID_COLS = ['completed_at', 'date', 'details', 'order_num', 'name']
+const COLS = ['completed_at', 'date', 'details', 'order_num', 'name']
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const createTodo = (db: IDatabase<any>, data: Partial<Todo>): Promise<Todo> => {
-  if (!checkRequiredColVals(data, ['date', 'name'])) throw genErr(400, 'Required column value missing')
-
-  const queryVarScaffold = genQueryVarScaffold(data, VALID_COLS)
+  const queryVarScaffold = genQueryVarScaffold(data, COLS)
   const indexVars = []
   let cols = ''
   let vals = ''
@@ -71,9 +67,7 @@ export const getTodoLists = (db: IDatabase<any>): ReturnType<typeof getTodoLists
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const patchTodo = (db: IDatabase<any>, id: number, data: Partial<Todo>): Promise<Todo> => {
-  if (!checkIfAColValExists(data, VALID_COLS)) throw genErr(400, 'At least one valid column value is required')
-
-  const queryVarScaffold = genQueryVarScaffold(data, VALID_COLS, id)
+  const queryVarScaffold = genQueryVarScaffold(data, COLS, id)
   const indexVars = []
 
   let text = `UPDATE ${TABLE} SET`
@@ -87,6 +81,12 @@ export const patchTodo = (db: IDatabase<any>, id: number, data: Partial<Todo>): 
     text += str
   })
   text += ' WHERE id = $1 RETURNING *'
-
   return db.one(text, indexVars)
 }
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const reorderTodos = (db: IDatabase<any>, data: number[]): Promise<Todo[]> =>
+  db.tx(t => {
+    const batch = data.map((id, i) => t.one(`UPDATE ${TABLE} SET order_num=${i + 1} WHERE id = $1 RETURNING *`, id))
+    return t.batch(batch)
+  })

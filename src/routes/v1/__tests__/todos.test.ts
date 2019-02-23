@@ -28,6 +28,7 @@ describe('Todo endpoints', () => {
   }
 
   let todo
+  let todo2
 
   it('should list no todos when no todos are in the DB', () =>
     request(app)
@@ -162,7 +163,7 @@ describe('Todo endpoints', () => {
       }))
 
   it('should list all todos by date ascending', () => {
-    // eslint-disable-next-line jest/valid-expect-in-promise
+    /* eslint-disable jest/valid-expect-in-promise */
     const firstTodo = request(app)
       .post(ENDPOINT)
       .send({
@@ -174,7 +175,6 @@ describe('Todo endpoints', () => {
         return res
       })
 
-    // eslint-disable-next-line jest/valid-expect-in-promise
     const secondTodo = request(app)
       .post(ENDPOINT)
       .send({
@@ -186,14 +186,15 @@ describe('Todo endpoints', () => {
         return res
       })
 
-    // eslint-disable-next-line jest/valid-expect-in-promise
     const thirdTodo = request(app)
       .post(ENDPOINT)
       .send(NEW_TODO_DATA)
       .then(res => {
+        todo = res.body.data
         expect(res.statusCode).toBe(201)
         return res
       })
+    /* eslint-enable jest/valid-expect-in-promise */
 
     return Promise.all([firstTodo, secondTodo, thirdTodo]).then(todos =>
       request(app)
@@ -225,6 +226,7 @@ describe('Todo endpoints', () => {
       .post(ENDPOINT)
       .send(anotherTodo)
       .then(res => {
+        todo2 = res.body.data
         expect(res.statusCode).toBe(201)
       })
       .then(() =>
@@ -260,4 +262,19 @@ describe('Todo endpoints', () => {
         expect(res.body.data[2]).toBe('1970-01-01T08:00:00.000Z')
       })
   })
+
+  it('should update todo orders', () =>
+    request(app)
+      .patch(`${ENDPOINT}/reorder`)
+      .send([todo2.id, todo.id])
+      .then(res => {
+        expect(res.statusCode).toBe(200)
+        expect(res.body.type).toBe(TYPE)
+        expect(res.body.data[0].id).toBe(todo2.id)
+        expect(res.body.data[0].order_num).not.toEqual(todo2.order_num)
+        expect(res.body.data[0].order_num).toBe(1)
+        expect(res.body.data[1].id).toBe(todo.id)
+        expect(res.body.data[1].order_num).not.toEqual(todo.order_num)
+        expect(res.body.data[1].order_num).toBe(2)
+      }))
 })

@@ -1,7 +1,15 @@
 import checkpoint from 'checkpointjs'
 import { Router } from 'express'
 
-import { createTodo, deleteTodo, getTodoById, getTodos, patchTodo, getTodoLists } from '../../util/db/todos'
+import {
+  createTodo,
+  deleteTodo,
+  getTodoById,
+  getTodoLists,
+  getTodos,
+  patchTodo,
+  reorderTodos
+} from '../../util/db/todos'
 import { formatAPIRes } from '../../util'
 import { genErr } from '../../util/err'
 import { db } from '../../app'
@@ -82,27 +90,54 @@ router.post('/', (req, res, next) => {
     .catch(err => next(err))
 })
 
-router.patch('/:id', (req, res, next) => {
-  const { completed_at, date, details, name, order_num } = req.body
-  const failedResults = checkpoint({ completed_at, date, details, name, order_num })
+router.patch('/reorder', (req, res, next) => {
+  const order = req.body
+  const failedResults = checkpoint(order)
     .validate({
-      schema,
-      options: {
-        exitASAP: true,
-        requireMode: 'atLeastOne'
-      },
-      type: 'object'
+      schema: { allowNull: false, isRequired: true, type: 'number' },
+      options: { exitASAP: true },
+      type: 'array',
+      arrayType: 'primitive'
     })
     .showFailedResults()
 
   if (failedResults.length > 0) return next(genErr(400, failedResults[0]))
 
-  return patchTodo(db, req.params.id, { completed_at, date, details, name, order_num })
+  // TODO: make sure all todos a part of the same todo list
+
+  return reorderTodos(db, order)
     .then(result => {
       res.locals.result = result
       return next()
     })
     .catch(err => next(err))
+})
+
+router.patch('/:id', (req, res, next) => {
+  if (req.params.id !== 'reorder') {
+    const { completed_at, date, details, name, order_num } = req.body
+    const failedResults = checkpoint({ completed_at, date, details, name, order_num })
+      .validate({
+        schema,
+        options: {
+          exitASAP: true,
+          requireMode: 'atLeastOne'
+        },
+        type: 'object'
+      })
+      .showFailedResults()
+
+    if (failedResults.length > 0) return next(genErr(400, failedResults[0]))
+
+    return patchTodo(db, req.params.id, { completed_at, date, details, name, order_num })
+      .then(result => {
+        res.locals.result = result
+        return next()
+      })
+      .catch(err => next(err))
+  }
+
+  return next()
 })
 
 router.delete('/:id', (req, res, next) =>
