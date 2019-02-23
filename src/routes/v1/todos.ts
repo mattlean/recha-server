@@ -1,6 +1,6 @@
+import checkpoint from 'checkpointjs'
 import { Router } from 'express'
 
-import validateInput from '../../util/validateInput'
 import { createTodo, deleteTodo, getTodoById, getTodos, patchTodo, getTodoLists } from '../../util/db/todos'
 import { formatAPIRes } from '../../util'
 import { genErr } from '../../util/err'
@@ -9,7 +9,7 @@ import { TYPE } from '../../types/Todo'
 
 const router = Router()
 
-const constraints = {
+const schema = {
   completed_at: { allowNull: true, type: 'string', strRules: { isDate: true } },
   date: { isRequired: true, type: 'string', strRules: { isDate: true } },
   details: { allowNull: true, type: 'string', strRules: { isLength: { max: 1024 } } },
@@ -19,19 +19,21 @@ const constraints = {
 
 router.get('/', (req, res, next) => {
   const { col, date, dir } = req.query
-  const invalids = validateInput(
-    { col, date, dir },
-    {
-      col: { type: 'string', strRules: { isIn: ['id', 'date', 'order_num'] } },
-      date: { type: 'string', strRules: { isDate: true } },
-      dir: { type: 'string', strRules: { isIn: ['ASC', 'asc', 'DESC', 'desc'] } }
-    },
-    {
-      exitASAP: true
-    }
-  ).showInvalidResults('array')
+  const failedResults = checkpoint({ col, date, dir })
+    .validate({
+      schema: {
+        col: { type: 'string', stringValidation: { isIn: ['id', 'date', 'order_num'] } },
+        date: { type: 'string', stringValidation: { isDate: true } },
+        dir: { type: 'string', stringValidation: { isIn: ['ASC', 'asc', 'DESC', 'desc'] } }
+      },
+      options: {
+        exitASAP: true
+      },
+      type: 'object'
+    })
+    .showFailedResults()
 
-  if (invalids.length > 0) return next(genErr(400, invalids[0]))
+  if (failedResults.length > 0) return next(genErr(400, failedResults[0]))
 
   return getTodos(db, date, col, dir)
     .then(result => {
@@ -65,11 +67,11 @@ router.get('/:id', (req, res, next) => {
 
 router.post('/', (req, res, next) => {
   const { completed_at, date, details, name, order_num } = req.body
-  const invalids = validateInput({ completed_at, date, details, name, order_num }, constraints, {
-    exitASAP: true
-  }).showInvalidResults('array')
+  const failedResults = checkpoint({ completed_at, date, details, name, order_num })
+    .validate({ schema, options: { exitASAP: true }, type: 'object' })
+    .showFailedResults()
 
-  if (invalids.length > 0) return next(genErr(400, invalids[0]))
+  if (failedResults.length > 0) return next(genErr(400, failedResults[0]))
 
   return createTodo(db, { completed_at, date, details, name, order_num })
     .then(result => {
@@ -82,12 +84,18 @@ router.post('/', (req, res, next) => {
 
 router.patch('/:id', (req, res, next) => {
   const { completed_at, date, details, name, order_num } = req.body
-  const invalids = validateInput({ completed_at, date, details, name, order_num }, constraints, {
-    exitASAP: true,
-    requireMode: 'atLeastOne'
-  }).showInvalidResults('array')
+  const failedResults = checkpoint({ completed_at, date, details, name, order_num })
+    .validate({
+      schema,
+      options: {
+        exitASAP: true,
+        requireMode: 'atLeastOne'
+      },
+      type: 'object'
+    })
+    .showFailedResults()
 
-  if (invalids.length > 0) return next(genErr(400, invalids[0]))
+  if (failedResults.length > 0) return next(genErr(400, failedResults[0]))
 
   return patchTodo(db, req.params.id, { completed_at, date, details, name, order_num })
     .then(result => {

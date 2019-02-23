@@ -17,7 +17,7 @@ class ServerErr extends InternalErr {
    * @param statusCode (Optional) HTTP status code
    * @param code (Optional) Error code
    */
-  public constructor(message?, statusCode?, code?) {
+  public constructor(message?: string, statusCode?: number, code?: string) {
     super(message, code)
     if (statusCode) this.statusCode = statusCode
   }

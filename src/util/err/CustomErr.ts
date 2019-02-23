@@ -11,7 +11,7 @@ export default class CustomErr extends Error {
    * Create CustomErr instance
    * @param message (Optional) Standard Error parameter. A human-readable description of the error.
    */
-  public constructor(message?) {
+  public constructor(message?: string) {
     super(message)
     this.name = this.constructor.name
   }

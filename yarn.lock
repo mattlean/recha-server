@@ -1676,6 +1676,14 @@ chardet@^0.7.0:
   resolved "https://registry.yarnpkg.com/chardet/-/chardet-0.7.0.tgz#90094849f0937f2eedc2425d0d28a9e5f0cbad9e"
   integrity sha512-mT8iDcrh03qDGRRmoA2hmBJnxpllMR+0/0qlzjqZES6NdiWDcZkCNAk4rPFZ9Q85r27unkiNNg8ZOiwZXBHwcA==
 
+checkpointjs@^0.0.4:
+  version "0.0.4"
+  resolved "https://registry.yarnpkg.com/checkpointjs/-/checkpointjs-0.0.4.tgz#c70af1cab8ee7443a93e08cbf9e5c012e7266292"
+  integrity sha512-bw40olMYSlbMh1xwK0tzoVcjQjTxzxBW9J/GGx83neGu/7N8oDnT2/K1G1a+GP4E70qiw8ZSYaOWIqJV5wpw8A==
+  dependencies:
+    lodash "^4.17.11"
+    validator "^10.11.0"
+
 chokidar@^2.0.2, chokidar@^2.0.4:
   version "2.0.4"
   resolved "https://registry.yarnpkg.com/chokidar/-/chokidar-2.0.4.tgz#356ff4e2b0e8e43e322d18a372460bbcf3accd26"

@@ -15,7 +15,7 @@ export default class InternalErr extends CustomErr {
    * @param message (Optional) Standard Error parameter. A human-readable description of the error.
    * @param code (Optional) Error code
    */
-  public constructor(message?, code?) {
+  public constructor(message?: string, code?: string) {
     super(message)
     if (code) this.code = code
   }
