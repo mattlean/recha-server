@@ -81,6 +81,8 @@ router.post('/', (req, res, next) => {
 
   if (failedResults.length > 0) return next(genErr(400, failedResults[0]))
 
+  // TODO: add to bottom of todo list if order_num is not set
+
   return createTodo(db, { completed_at, date, details, name, order_num })
     .then(result => {
       res.status(201)

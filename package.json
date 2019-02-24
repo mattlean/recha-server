@@ -35,7 +35,7 @@
   "homepage": "https://github.com/IsaacLean/recha-server#readme",
   "dependencies": {
     "body-parser": "^1.18.3",
-    "checkpointjs": "^0.0.4",
+    "checkpointjs": "^0.0.5",
     "compression": "^1.7.3",
     "cross-fetch": "^3.0.1",
     "express": "^4.16.4",
