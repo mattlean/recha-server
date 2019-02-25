@@ -16,6 +16,7 @@
         "@typescript-eslint/indent": 0,
         "@typescript-eslint/member-delimiter-style": 0,
         "@typescript-eslint/no-unused-vars": 0,
+        "import/no-named-default": 0,
         "indent": [
             "error",
             2,
@@ -25,6 +26,9 @@
             "error",
             "unix"
         ],
+        "no-shadow": 1,
+        "no-underscore-dangle": 0,
+        "prefer-destructuring": 0,
         "quotes": 0,
         "semi": [
             "error",
