@@ -1,6 +1,6 @@
 const CleanWebpackPlugin = require('clean-webpack-plugin')
 const nodeExternals = require('webpack-node-externals')
-const UglifyWebpackPlugin = require('uglifyjs-webpack-plugin')
+const TerserPlugin = require('terser-webpack-plugin')
 const webpack = require('webpack')
 
 const PATHS = require('../PATHS')
@@ -35,7 +35,7 @@ exports.loadJS = ({ exclude, include } = {}) => ({
 // Minify JavaScript
 exports.minJS = () => ({
   optimization: {
-    minimizer: [new UglifyWebpackPlugin({ sourceMap: true })]
+    minimizer: [new TerserPlugin({ sourceMap: true })]
   }
 })
 
