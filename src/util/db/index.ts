@@ -55,7 +55,7 @@ export const genQueryVarScaffold = (data: object, keyFilter: string[], id?: numb
     if (keyFilter.indexOf(key) > -1) {
       if (!idStr && key === 'id' && data[key]) {
         queryVarScaffold.unshift({ name: key, val: data[key] })
-      } else if (data[key] || data[key] === null) {
+      } else if (data[key] || data[key] === '' || data[key] === null) {
         queryVarScaffold.push({ name: key, val: data[key] })
       }
     }
