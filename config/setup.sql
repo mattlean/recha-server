@@ -6,7 +6,7 @@ CREATE TABLE todos (
   name VARCHAR(280) NOT NULL,
   order_num INTEGER,
   completed_at TIMESTAMPTZ,
-  details VARCHAR(1024),
+  details VARCHAR(999999),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
