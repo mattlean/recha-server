@@ -26,7 +26,6 @@ if (process.env.NODE_ENV === 'development') {
 
 /* CORS setup */
 if (CLIENT) {
-  // eslint-disable-next-line no-unused-vars
   app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', CLIENT)
     res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept')
@@ -43,9 +42,10 @@ app.get('/', (req, res) => res.json(genApiData()))
 app.use(`${API.VERS.V1.PATH}`, routeV1)
 
 /* Not found handler */
-app.use((req, res, next) => next(genErr(404))) // eslint-disable-line no-unused-vars
+app.use((req, res, next) => next(genErr(404)))
 
 /* Error handler */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 app.use((err, req, res, next) => {
   if (process.env.NODE_ENV !== 'test') {
     let errMessage = ''
