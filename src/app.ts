@@ -1,6 +1,7 @@
 import compression from 'compression'
 import express from 'express'
 import helmet from 'helmet'
+import morgan from 'morgan'
 import { json } from 'body-parser'
 import 'source-map-support/register'
 
@@ -18,10 +19,9 @@ app.use(json())
 
 /* Logging middleware */
 if (process.env.NODE_ENV === 'development') {
-  app.use((req, res, next) => {
-    logger.debug(`${req.method} ${req.path}`)
-    next()
-  })
+  app.use(morgan('dev'))
+} else if (process.env.NODE_ENV === 'production') {
+  app.use(morgan('common'))
 }
 
 /* CORS setup */

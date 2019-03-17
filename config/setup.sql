@@ -1,5 +1,13 @@
 SET timezone = 'UTC'
 
+CREATE ROLE me WITH LOGIN PASSWORD 'password';
+
+ALTER ROLE me CREATEDB;
+
+GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO me;
+
+GRANT USAGE, SELECT ON SEQUENCE todos_id_seq TO me;
+
 CREATE TABLE todos (
   id SERIAL PRIMARY KEY,
   date DATE NOT NULL,
@@ -25,9 +33,5 @@ FOR EACH ROW
 EXECUTE PROCEDURE trigger_set_timestamp();
 
 -- TODO: set minimum character check for name
-
-GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO me;
-
-GRANT USAGE, SELECT ON SEQUENCE todos_id_seq TO me;
 
 -- INSERT INTO todos (name, details, completed_at) VALUES ('hey', 'lipsum', '2019-01-25T00:53:52Z');
