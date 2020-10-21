@@ -5,8 +5,9 @@
   "main": "build/back/index.js",
   "scripts": {
     "back:build": "tsc",
+    "back:dev": "nodemon --exec \"yarn front:build && yarn back:build && yarn back:start\"",
     "back:start": "node build/back/index",
-    "dev": "nodemon --exec \"yarn front:build && yarn back:build && yarn back:start\"",
+    "front:dev": "nodemon --config nodemon-front.json --exec \"webpack-dev-server --config webpack/config.js\"",
     "front:build": "webpack --config webpack/config.js",
     "test": "jest"
   },
@@ -78,6 +79,7 @@
     "prettier": "^2.1.2",
     "react-test-renderer": "^17.0.0",
     "supertest": "^5.0.0",
-    "ts-jest": "^26.4.1"
+    "ts-jest": "^26.4.1",
+    "webpack-dev-server": "^3.11.0"
   }
 }

@@ -1,4 +1,9 @@
-const { cleanOutput, compileJS, setMode } = require('ljas-webpack')
+const {
+  cleanOutput,
+  compileJS,
+  setupDevServer,
+  setMode,
+} = require('ljas-webpack')
 const { injectStyles } = require('ljas-webpack/style')
 const { setupHTML } = require('ljas-webpack/html')
 const { FRONT } = require('../PATHS')
@@ -34,6 +39,12 @@ module.exports = () => {
     injectStyles({
       cssLoaderOptions: { sourceMap: true },
       sassLoaderOptions: { sourceMap: true },
+    }),
+
+    setupDevServer({
+      host: process.env.HOST,
+      port: 9489,
+      historyApiFallback: true,
     }),
 
     setupHTML({ template: 'src/front/template.ejs' }),
