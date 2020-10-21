@@ -9,7 +9,7 @@ app.use(express.static(path.join(__dirname, '../front')))
 
 app.use(morgan('dev'))
 
-app.get('/', (req, res) => {
+app.get('/hello-world', (req, res) => {
   res.send('Hello World!')
 })
 
