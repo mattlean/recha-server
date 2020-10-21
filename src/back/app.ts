@@ -3,8 +3,6 @@ import morgan from 'morgan'
 import path from 'path'
 
 const initApp = () => {
-  console.log('Server initialized')
-
   const app = express()
 
   app.use(express.static(path.join(__dirname, '../front')))
