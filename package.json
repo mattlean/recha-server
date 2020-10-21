@@ -2,11 +2,11 @@
   "name": "recha-server",
   "version": "0.0.1",
   "description": "",
-  "main": "dist/index.js",
+  "main": "build/back/index.js",
   "scripts": {
     "back:build": "tsc",
-    "dev": "nodemon --exec \"yarn front:build && yarn back:build && yarn back:start\"",
     "back:start": "node build/back/index",
+    "dev": "nodemon --exec \"yarn front:build && yarn back:build && yarn back:start\"",
     "front:build": "webpack --config webpack/config.js",
     "test": "jest"
   },
