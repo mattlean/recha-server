@@ -1,37 +1,9 @@
 {
-    "env": {
-        "es6": true,
-        "node": true
-    },
-    "extends": [
-        "airbnb-base",
-        "prettier",
-        "plugin:jest/recommended"
-    ],
-    "parserOptions": {
-        "sourceType": "module"
-    },
-    "plugins": [
-        "prettier",
-        "jest"
-    ],
-    "rules": {
-        "indent": [
-            "error",
-            2,
-            { "SwitchCase": 1 }
-        ],
-        "linebreak-style": [
-            "error",
-            "unix"
-        ],
-        "no-shadow": 1,
-        "no-underscore-dangle": 0,
-        "prefer-destructuring": 0,
-        "quotes": 0,
-        "semi": [
-            "error",
-            "never"
-        ]
-    }
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:prettier/recommended"
+  ],
+  "parser": "@typescript-eslint/parser",
+  "plugins": ["@typescript-eslint"]
 }

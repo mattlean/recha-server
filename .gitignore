@@ -1,7 +1,4 @@
-build/
-coverage/
+dist/
 node_modules/
-src/config/development.ts
 .eslintcache
-stats.*.json
 yarn-error.log
