@@ -5,9 +5,10 @@
   "main": "dist/index.js",
   "scripts": {
     "back:build": "tsc",
-    "back:dev": "nodemon --exec \"yarn front:build && yarn back:build && yarn back:start\"",
+    "dev": "nodemon --exec \"yarn front:build && yarn back:build && yarn back:start\"",
     "back:start": "node build/back/index",
-    "front:build": "webpack --config webpack/config.js"
+    "front:build": "webpack --config webpack/config.js",
+    "test": "jest"
   },
   "repository": {
     "type": "git",
@@ -27,6 +28,7 @@
     "@mattlean/express-yaas": "0.0.1",
     "@svgr/webpack": "^5.4.0",
     "asset-list-webpack-plugin": "^0.4.0",
+    "babel-jest": "^26.6.0",
     "babel-loader": "^8.1.0",
     "bcrypt": "^5.0.0",
     "body-parser": "^1.19.0",
@@ -61,15 +63,21 @@
   "devDependencies": {
     "@types/bcrypt": "^3.0.0",
     "@types/express": "^4.17.8",
+    "@types/jest": "^26.0.15",
     "@types/morgan": "^1.9.1",
     "@types/node": "^14.14.0",
     "@types/react": "^16.9.53",
     "@types/react-dom": "^16.9.8",
+    "@types/supertest": "^2.0.10",
     "@typescript-eslint/eslint-plugin": "^4.5.0",
     "@typescript-eslint/parser": "^4.5.0",
     "eslint": "^7.11.0",
     "eslint-config-prettier": "^6.13.0",
+    "jest": "^26.6.0",
     "nodemon": "^2.0.6",
-    "prettier": "^2.1.2"
+    "prettier": "^2.1.2",
+    "react-test-renderer": "^17.0.0",
+    "supertest": "^5.0.0",
+    "ts-jest": "^26.4.1"
   }
 }

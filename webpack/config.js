@@ -1,4 +1,4 @@
-const { compileJS, setMode } = require('ljas-webpack')
+const { cleanOutput, compileJS, setMode } = require('ljas-webpack')
 const { injectStyles } = require('ljas-webpack/style')
 const { setupHTML } = require('ljas-webpack/html')
 const { FRONT } = require('../PATHS')
@@ -15,6 +15,8 @@ module.exports = () => {
         extensions: ['.js', '.jsx', '.ts', '.tsx'],
       },
     },
+
+    cleanOutput(),
 
     setMode('development'),
 
