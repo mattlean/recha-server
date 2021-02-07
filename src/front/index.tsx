@@ -1,5 +1,5 @@
 import { render } from 'react-dom'
-import HelloWorld from './HelloWorld'
+import HelloWorld from 'front/components/HelloWorld'
 import './index.scss'
 
 render(<HelloWorld />, document.getElementById('root'))

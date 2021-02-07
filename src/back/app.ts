@@ -1,8 +1,11 @@
-import express from 'express'
+import express, { Express } from 'express'
 import morgan from 'morgan'
 import path from 'path'
 
-const initApp = () => {
+/**
+ * Initialize Recha server app
+ */
+export const initApp = (): Express => {
   const app = express()
 
   app.use(express.static(path.join(__dirname, '../front')))
@@ -15,5 +18,3 @@ const initApp = () => {
 
   return app
 }
-
-export default initApp

@@ -1,11 +1,13 @@
 import request from 'supertest'
-import initApp from '../app'
+import { initApp } from 'back/app'
 
-test('"hello" is equal to "hello2"', async () => {
-  expect.assertions(1)
-  const app = initApp()
+describe('/hello-world endpoint', () => {
+  it('returns "Hello World!"', async () => {
+    expect.assertions(1)
+    const app = initApp()
 
-  const res = await request(app).get('/hello-world')
+    const res = await request(app).get('/hello-world')
 
-  expect(res.text).toBe('Hello World!')
+    expect(res.text).toBe('Hello World!')
+  })
 })

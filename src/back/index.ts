@@ -1,4 +1,4 @@
-import initApp from './app'
+import { initApp } from 'back/app'
 
 const app = initApp()
 const port = 3000

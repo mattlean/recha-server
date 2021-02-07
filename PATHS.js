@@ -1,17 +1,17 @@
-const path = require('path')
+const { join } = require('path')
 
 const PATHS = {
-  COMMON: path.join(__dirname, 'src/common'),
+  COMMON: join(__dirname, 'src/common'),
   BACK: {
-    BUILD: path.join(__dirname, 'build/back'),
-    SRC: path.join(__dirname, 'src/back'),
+    BUILD: join(__dirname, 'build/back'),
+    SRC: join(__dirname, 'src/back'),
   },
   FRONT: {
-    BUILD: path.join(__dirname, 'build/front'),
-    SRC: path.join(__dirname, 'src/front'),
+    BUILD: join(__dirname, 'build/front'),
+    SRC: join(__dirname, 'src/front'),
   },
-  SRC: path.join(__dirname, 'src'),
-  NODE_MODULES: path.join(__dirname, 'node_modules'),
+  SRC: join(__dirname, 'src'),
+  NODE_MODULES: join(__dirname, 'node_modules'),
 }
 
 module.exports = PATHS
