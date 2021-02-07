@@ -1,0 +1,10 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "target": "ES2015",
+    "module": "es2015",
+    "jsx": "preserve"
+  },
+  "include": ["src/front"],
+  "exclude": ["**/*.test.js", "**/*.test.jsx", "**/*.test.ts", "**/*.test.tsx"]
+}

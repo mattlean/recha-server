@@ -1,11 +1,6 @@
 const merge = require('webpack-merge')
 const { resolve } = require('path')
-const {
-  cleanOutput,
-  // compileJS,
-  setupDevServer,
-  setMode,
-} = require('ljas-webpack')
+const { cleanOutput, setupDevServer, setMode } = require('ljas-webpack')
 const { injectStyles } = require('ljas-webpack/style')
 const { setupHTML } = require('ljas-webpack/html')
 const { FRONT } = require('../../PATHS')
@@ -17,6 +12,7 @@ module.exports = () => {
       output: {
         path: FRONT.BUILD,
       },
+      optimization: { usedExports: true },
       resolve: {
         alias: {
           front: resolve(__dirname, '../../src/front'),
@@ -33,27 +29,30 @@ module.exports = () => {
       module: {
         rules: [
           {
-            test: /\.tsx?$/,
-            use: {
-              loader: 'ts-loader',
-              options: { configFile: '../../tsconfig.front-dev.json' },
-            },
+            test: /\.(j|t)sx?$/,
+            use: [
+              {
+                loader: 'babel-loader',
+                options: {
+                  presets: [
+                    ['@babel/preset-env', { modules: false }],
+                    [
+                      '@babel/preset-react',
+                      { development: true, runtime: 'automatic' },
+                    ],
+                  ],
+                },
+              },
+              {
+                loader: 'ts-loader',
+                options: { configFile: '../../tsconfig.front.json' },
+              },
+            ],
             include: [FRONT.SRC],
           },
         ],
       },
     },
-
-    // compileJS({
-    //   test: /\.(j|t)sx?$/i,
-    //   include: [FRONT.SRC],
-    //   options: {
-    //     presets: [
-    //       '@babel/preset-typescript',
-    //       ['@babel/preset-react', { development: true, runtime: 'automatic' }],
-    //     ],
-    //   },
-    // }),
 
     injectStyles({
       cssLoaderOptions: { sourceMap: true },
