@@ -43,7 +43,7 @@
     "moment": "^2.24.0",
     "pg-promise": "^8.5.6",
     "source-map-support": "^0.5.10",
-    "validator": "^10.11.0",
+    "validator": "^13.7.0",
     "winston": "^3.2.1"
   },
   "devDependencies": {
